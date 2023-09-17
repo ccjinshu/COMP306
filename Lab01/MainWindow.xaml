@@ -5,8 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Lab01"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="Shu Jin 301303882 Lab1@COMP306" Height="380" Width="800"
+        Closing="Window_Closing">
+    <Grid Margin="0,0,0,0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="0*"/>
+        </Grid.ColumnDefinitions>
+        <Button Content="Bucket level creation" HorizontalAlignment="Left" Margin="50,97,0,0" VerticalAlignment="Top" Width="196" Height="56" Click="Button_Click"/>
+        <Button Content="Object Level Operations" HorizontalAlignment="Center" Margin="0,97,0,0" VerticalAlignment="Top" Width="216" Height="56" RenderTransformOrigin="0.298,0.536" Click="Button_Click_2"/>
+        <Button Content="Exit" HorizontalAlignment="Left" Margin="562,97,0,0" VerticalAlignment="Top" Width="124" Height="56" Click="Button_Click_1"/>
+        <StatusBar Margin="0,300,0,0">
+            <Label Content="Shu Jin 301303882" Width="325"/>
+        </StatusBar>
 
     </Grid>
 </Window>

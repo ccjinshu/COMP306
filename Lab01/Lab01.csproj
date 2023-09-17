@@ -5,6 +5,16 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>doc\squirrel_icon.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="doc\squirrel_icon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.Core" Version="3.7.202.10" />
+    <PackageReference Include="AWSSDK.S3" Version="3.7.203.16" />
+  </ItemGroup>
 
 </Project>
