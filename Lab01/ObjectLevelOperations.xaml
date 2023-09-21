@@ -6,16 +6,20 @@
         xmlns:local="clr-namespace:Lab01"
         mc:Ignorable="d"
         Title="Object Level Operations" Height="450" Width="800"
-        Closing="Window_Closing">
+        Closing="Window_Closing" Activated="Window_Activated">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
         <Label Content="Bucket" HorizontalAlignment="Left" Margin="43,18,0,0" VerticalAlignment="Top" Width="63"/>
-        <ComboBox x:Name="BucketDropDown" HorizontalAlignment="Left" Margin="106,18,0,0" VerticalAlignment="Top" Width="521" RenderTransformOrigin="0.266,0.682" SelectionChanged="Bucket_SelectionChanged"/>
+        <ComboBox x:Name="BucketDropDown" HorizontalAlignment="Left" Margin="106,18,0,0" VerticalAlignment="Top" Width="521" RenderTransformOrigin="0.266,0.682" SelectionChanged="Bucket_SelectionChanged" Grid.ColumnSpan="2"/>
         <Label Content="Object" HorizontalAlignment="Left" Margin="43,66,0,0" VerticalAlignment="Top" Width="63"/>
-        <TextBox Name="NewObjectFileTextBox" HorizontalAlignment="Left" Height="31" Margin="106,68,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="521" />
-        <DataGrid Name="ObjectDataGrid" HorizontalAlignment="Left" Height="294" Margin="10,123,0,0" VerticalAlignment="Top" Width="617"/>
-        <Button Name="btnBrowse" Content="Browse" HorizontalAlignment="Left" Margin="642,68,0,0" VerticalAlignment="Top" Width="88" Height="31" Click="btnBrowse_Click"/>
-        <Button Name="btnUpload" Content="Upload" HorizontalAlignment="Left" Margin="642,123,0,0" VerticalAlignment="Top" Width="88" Height="31" Click="btnUpload_Click"/>
-        <Button Name="btnHome" Content="Back To Main Window" HorizontalAlignment="Left" Margin="642,361,0,0" VerticalAlignment="Top" Width="136" Height="33" RenderTransformOrigin="0.511,0.804" Click="btnHome_Click"/>
+        <TextBox Name="NewObjectFileTextBox" HorizontalAlignment="Left" Height="31" Margin="106,68,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="521" Grid.ColumnSpan="2" />
+        <DataGrid Name="ObjectDataGrid" HorizontalAlignment="Left" Height="294" Margin="10,123,0,0" VerticalAlignment="Top" Width="617" Grid.ColumnSpan="2"/>
+        <Button Name="btnBrowse" Content="Browse" HorizontalAlignment="Left" Margin="162,68,0,0" VerticalAlignment="Top" Width="88" Height="31" Click="btnBrowse_Click" Grid.Column="1"/>
+        <Button Name="btnUpload" Content="Upload" HorizontalAlignment="Left" Margin="162,123,0,0" VerticalAlignment="Top" Width="88" Height="31" Click="btnUpload_Click" Grid.Column="1"/>
+        <Button Name="btnHome" Content="Back To Main Window" HorizontalAlignment="Left" Margin="162,361,0,0" VerticalAlignment="Top" Width="136" Height="33" RenderTransformOrigin="0.511,0.804" Click="btnHome_Click" Grid.Column="1"/>
 
     </Grid>
 </Window>

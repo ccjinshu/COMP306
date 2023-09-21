@@ -75,6 +75,7 @@ namespace Lab01
                 });
 
                 getMyBuckets();
+
             }
             catch (Exception ex)
             {
@@ -105,7 +106,7 @@ namespace Lab01
         {
             var s3Client = new AmazonS3Client(Config.ACCESSKEY, Config.SECRETKEY, bucketRegion);
             var buckets = await s3Client.ListBucketsAsync();
-
+           
             //buckets sort by  create time desc
             buckets.Buckets.Sort((x, y) => y.CreationDate.CompareTo(x.CreationDate));
 

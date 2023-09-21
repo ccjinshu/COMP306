@@ -43,6 +43,7 @@ namespace Lab01
         {
             var s3Client = new AmazonS3Client(Config.ACCESSKEY, Config.SECRETKEY, bucketRegion);
             var buckets = await s3Client.ListBucketsAsync();
+            BucketDropDown.Items.Clear();   
             foreach (var bucket in buckets.Buckets)
             {
                 BucketDropDown.Items.Add(new ComboBoxItem().Content = bucket.BucketName);
@@ -142,6 +143,11 @@ namespace Lab01
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             System.Windows.Application.Current.Shutdown();
+        }
+
+        private void Window_Activated(object sender, EventArgs e)
+        {
+            
         }
     }
 }
