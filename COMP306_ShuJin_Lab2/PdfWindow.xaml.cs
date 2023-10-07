@@ -53,8 +53,7 @@ namespace COMP306_ShuJin_Lab2
             //register the event handler for  window loaded event
             this.Loaded += PdfWindow_Loaded;
 
-            this.Closing += PdfWindow_Closing;
-            this.Closed += PdfWindow_Closed;
+            this.Closing += PdfWindow_Closing; 
 
             
 
@@ -64,7 +63,18 @@ namespace COMP306_ShuJin_Lab2
 
         private void PdfWindow_Closing(object? sender, CancelEventArgs e)
         {
-           e.Cancel= _is_bookmark_running;
+           
+
+            if(_is_bookmark_running)
+            {
+                e.Cancel = true;
+                MessageBox.Show("Please wait for the bookmark to be updated");
+                
+            }
+            else
+            {
+                UpdateBookmarkAsync();
+            } 
             
         }
 
@@ -150,11 +160,7 @@ namespace COMP306_ShuJin_Lab2
             UpdateBookmarkAsync();
             _is_bookmark_running= false;
         }
-
-        private void PdfWindow_Closed(object sender, EventArgs e)
-        {
-            UpdateBookmarkAsync();
-        }
+ 
 
         private async Task UpdateBookmarkAsync()
         { 
