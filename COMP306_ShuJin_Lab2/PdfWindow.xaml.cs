@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -36,10 +37,14 @@ namespace COMP306_ShuJin_Lab2
         AwsProxy _awsProxy;
         User _user;
         Book _book; 
+        bool _is_bookmark_running = false;
         public PdfWindow(User user  ,Book book)
         {
-            InitializeComponent(); 
-            _awsProxy= new AwsProxy();
+            InitializeComponent();
+            //窗口居中 
+            WindowStartupLocation = WindowStartupLocation.CenterScreen;
+
+            _awsProxy = new AwsProxy();
             _s3Helper = new S3Helper();
 
             _user = user;
@@ -48,16 +53,28 @@ namespace COMP306_ShuJin_Lab2
             //register the event handler for  window loaded event
             this.Loaded += PdfWindow_Loaded;
 
-             
+            this.Closing += PdfWindow_Closing;
+            this.Closed += PdfWindow_Closed;
 
+            
+
+
+
+        }
+
+        private void PdfWindow_Closing(object? sender, CancelEventArgs e)
+        {
+           e.Cancel= _is_bookmark_running;
+            
         }
 
         private void PdfWindow_Loaded(object sender, RoutedEventArgs e)
         {
              this.LoadPdf();
+            
         }
 
-        public  async void LoadPdf()
+        public  async void LoadPdf_v0()
         {
             try
             {
@@ -103,30 +120,53 @@ namespace COMP306_ShuJin_Lab2
         }
 
 
-        
+
+        public async void LoadPdf()
+        {
+            try
+            { 
+
+                var stream = await _s3Helper.GetBookStreamAsync(_book.FileKey);
+                // Use the stream with Syncfusion PdfViewer
+                PdfViewer.Load(stream); 
+                PdfViewer.GotoPage(_book.BookmarkPage);
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions that occur during PDF loading  
+
+
+                MessageBox.Show($"Error loading PDF: {ex.Message}");
+            }
+        }
+
 
 
 
 
         private void BookmarkButton_Click(object sender, RoutedEventArgs e)
         {
+            _is_bookmark_running = true;
             UpdateBookmarkAsync();
+            _is_bookmark_running= false;
         }
 
-        private void Window_Closed(object sender, EventArgs e)
+        private void PdfWindow_Closed(object sender, EventArgs e)
         {
             UpdateBookmarkAsync();
         }
 
         private async Task UpdateBookmarkAsync()
-        {
+        { 
+           
             // Update the bookmarked page of the current book
             _book.BookmarkPage = PdfViewer.CurrentPageIndex;
             _book.BookmarkTime = DateTime.Now;
 
             // Update the bookmark in DynamoDB table
             await _awsProxy.UpdateBookmark(_book);
-            
+             
+
         }
     }
 }

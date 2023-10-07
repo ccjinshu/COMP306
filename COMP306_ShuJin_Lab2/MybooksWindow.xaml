@@ -13,7 +13,7 @@
                     <GridViewColumn Header="Book Title" DisplayMemberBinding="{Binding Title}" Width="200"/>
                     <GridViewColumn Header="Bookmark Page" DisplayMemberBinding="{Binding BookmarkPage}" Width="100"/>
                     <GridViewColumn Header="Bookmark Time" DisplayMemberBinding="{Binding BookmarkTime}" Width="150"/>
-                    <GridViewColumn Header="File URL " DisplayMemberBinding="{Binding FileUrl}" Width="150"/>
+                    <GridViewColumn Header="File" DisplayMemberBinding="{Binding FileKey}" Width="350"/>
                 </GridView>
             </ListView.View>
         </ListView>

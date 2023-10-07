@@ -1,4 +1,5 @@
 ﻿using COMP306_ShuJin_Lab2.AWS;
+using System;
 using System.Windows;
 
 namespace COMP306_ShuJin_Lab2
@@ -14,10 +15,22 @@ namespace COMP306_ShuJin_Lab2
         {
             InitializeComponent();
 
+            //窗口居中 
+            WindowStartupLocation = WindowStartupLocation.CenterScreen;
+
 
             // initAppDb();
             awsProxy = new AwsProxy();
             awsProxy.initAppDb();
+
+            //regiest event : windows Closed
+            this.Closed += MainWindow_Closed;
+        }
+
+        private void MainWindow_Closed(object? sender, EventArgs e)
+        {
+           //exit the application
+            Application.Current.Shutdown();
         }
 
 
@@ -49,10 +62,10 @@ namespace COMP306_ShuJin_Lab2
                 //MessageBox.Show("Login Successful");
 
                 // Navigate to Bookshelf page
+                this.Hide();
                 MybooksWindow mybooksWindow = new MybooksWindow(currentUser);
                 mybooksWindow.Show();
-                //hiden the login window
-                this.Hide();
+                
 
             }
             else

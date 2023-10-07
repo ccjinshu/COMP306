@@ -60,7 +60,7 @@ namespace COMP306_ShuJin_Lab2.AWS
             //gen 3 users
             await Simple_Gen_Three_Users();
             //create table Book
-            await createTable_Bookshelf();
+            //await createTable_Bookshelf();
 
             //gen books data
             //await Simple_Gen_Books();
@@ -420,8 +420,7 @@ namespace COMP306_ShuJin_Lab2.AWS
 
                     var book = new Book();
                     book.Id = item["Id"].S;
-                    book.UserId = item["UserId"].S;
-                    book.BookId = item["BookId"].S;
+                    book.UserId = item["UserId"].S; 
                     book.Title = item["Title"].S;
                     book.Author = item["Author"].S;
                     book.BookmarkPage = int.Parse(item["BookmarkPage"].N);
@@ -442,6 +441,9 @@ namespace COMP306_ShuJin_Lab2.AWS
                     books.Add(book);
                 }
 
+
+                //sort by bookmark time
+                books = books.OrderByDescending(b => b.BookmarkTime).ToList();
                  
 
             }
@@ -482,12 +484,38 @@ namespace COMP306_ShuJin_Lab2.AWS
                 }
             }
 
-            var list = new List<Book>();
+            var list = new List<Book>(); 
+
             list.Add(new Book
             {
                 Id = "1",
                 UserId = "1",
-                BookId = "4",
+                BookId = "1",
+                Title = "COMP306 - Lab#1",
+                Author = "CC",
+                BookmarkPage = 1,
+                BookmarkTime = DateTime.Now,
+                FileUrl = "https://s3-comp306-sjin-lab02.s3.ca-central-1.amazonaws.com/Lab%231.pdf",
+                FileKey = "Lab#1.pdf",
+            });
+            list.Add(new Book
+            {
+                Id = "2",
+                UserId = "1",
+                BookId = "2",
+                Title = "COMP306 - Lab#2",
+                Author = "CC",
+                BookmarkPage = 1,
+                BookmarkTime = DateTime.Now,
+                FileUrl = "https://s3-comp306-sjin-lab02.s3.ca-central-1.amazonaws.com/Lab%232+(2).pdf",
+                FileKey = "Lab#2 (2).pdf",
+            });
+
+            list.Add(new Book
+            {
+                Id = "3",
+                UserId = "1",
+                BookId = "3",
                 Title = "SQL LOADER UTILITY",
                 Author = "R.Barry",
                 BookmarkPage = 1,
@@ -496,27 +524,13 @@ namespace COMP306_ShuJin_Lab2.AWS
                 FileKey = "SQL LOADER UTILITY 1133947360_350549.pdf",
             });
 
-
             list.Add(new Book
             {
-                Id = "2",
-                UserId = "1",
-                BookId = "5",
-                Title = "The C# Player's Guide",
-                Author = "R.Barry",
-                BookmarkPage = 1,
-                BookmarkTime = DateTime.Now,
-                FileUrl = "https://s3-comp306-sjin-lab02.s3.ca-central-1.amazonaws.com/253+Week+4+22W.pdf",
-                FileKey = "253 Week 4 22W.pdf",
-            });
-
-            list.Add(new Book
-            {
-                Id = "3",
-                UserId = "1",
-                BookId = "6",
-                Title = "STATEMENT TUNING 1133947360_350548.pdf",
-                Author = "Jee",
+                Id = "4",
+                UserId = "2",
+                BookId = "4",
+                Title = "STATEMENT TUNING",
+                Author = "CC",
                 BookmarkPage = 1,
                 BookmarkTime = DateTime.Now,
                 FileUrl = "https://s3-comp306-sjin-lab02.s3.ca-central-1.amazonaws.com/STATEMENT+TUNING+1133947360_350548.pdf",
@@ -525,37 +539,26 @@ namespace COMP306_ShuJin_Lab2.AWS
 
             list.Add(new Book
             {
-                Id = "4",
+                Id = "5",
                 UserId = "2",
-                BookId = "7",
-                Title = "letter formats",
-                Author = "CC",
+                BookId = "5",
+                Title = "COMM253  - Letter Formats",
+                Author = "CC English",
                 BookmarkPage = 1,
                 BookmarkTime = DateTime.Now,
                 FileUrl = "https://s3-comp306-sjin-lab02.s3.ca-central-1.amazonaws.com/letter+formats.pdf",
                 FileKey = "letter formats.pdf",
             });
 
-            list.Add(new Book
-            {
-                Id = "5",
-                UserId = "2",
-                BookId = "8",
-                Title = "Lab#1.pdf",
-                Author = "R.Barry",
-                BookmarkPage = 1,
-                BookmarkTime = DateTime.Now,
-                FileUrl = "https://s3-comp306-sjin-lab02.s3.ca-central-1.amazonaws.com/Lab%231.pdf",
-                FileKey = "Lab#1.pdf",
-            });
+            
 
             list.Add(new Book
             {
                 Id = "6",
                 UserId = "2",
-                BookId = "9",
-                Title = "COMP_3061.pdf",
-                Author = "mgic .Barry",
+                BookId = "6",
+                Title = "COMP_306 Outline",
+                Author = "CC COMP306",
                 BookmarkPage = 1,
                 BookmarkTime = DateTime.Now,
                 FileUrl = "https://s3-comp306-sjin-lab02.s3.ca-central-1.amazonaws.com/COMP_3061.pdf",
@@ -566,9 +569,9 @@ namespace COMP306_ShuJin_Lab2.AWS
             {
                 Id = "7",
                 UserId = "3",
-                BookId = "10",
-                Title = "The C# Player's Guide",
-                Author = "R.Barry",
+                BookId = "7",
+                Title = "253 Week 4 22W",
+                Author = "CC",
                 BookmarkPage = 1,
                 BookmarkTime = DateTime.Now,
                 FileUrl = "https://s3-comp306-sjin-lab02.s3.ca-central-1.amazonaws.com/253+Week+4+22W.pdf",
@@ -579,38 +582,107 @@ namespace COMP306_ShuJin_Lab2.AWS
             {
                 Id = "8",
                 UserId = "3",
-                BookId = "11",
-                Title = "The C# Player's Guide",
-                Author = "R.Barry",
+                BookId = "8",
+                Title = "TOOL FOR ORACLE APPLICATION DEVELOPERS",
+                Author = "CC",
                 BookmarkPage = 1,
                 BookmarkTime = DateTime.Now,
-                FileUrl = "https://s3-comp306-sjin-lab02.s3.ca-central-1.amazonaws.com/253+Week+4+22W.pdf",
-                FileKey = "253 Week 4 22W.pdf",
+                FileUrl = "https://s3-comp306-sjin-lab02.s3.ca-central-1.amazonaws.com/TOAD+(TOOL+FOR+ORACLE+APPLICATION+DEVELOPERS)+1133947360_350547.pdf",
+                FileKey = "TOAD (TOOL FOR ORACLE APPLICATION DEVELOPERS) 1133947360_350547.pdf",
             });
 
+
+            /// --------------------
             list.Add(new Book
             {
                 Id = "9",
                 UserId = "3",
-                BookId = "12",
-                Title = "The C# Player's Guide",
+                BookId = "9",
+                Title = "SQL LOADER UTILITY",
                 Author = "R.Barry",
                 BookmarkPage = 1,
                 BookmarkTime = DateTime.Now,
-                FileUrl = "https://s3-comp306-sjin-lab02.s3.ca-central-1.amazonaws.com/253+Week+4+22W.pdf",
-                FileKey = "253 Week 4 22W.pdf",
+                FileUrl = "https://s3-comp306-sjin-lab02.s3.ca-central-1.amazonaws.com/SQL+LOADER+UTILITY+1133947360_350549.pdf",
+                FileKey = "SQL LOADER UTILITY 1133947360_350549.pdf",
             });
 
             list.Add(new Book
             {
                 Id = "10",
-                UserId = "5",
-                BookId = "13",
-                Title = "The C# Player's Guide",
-                Author = "R.Barry",
+                UserId = "4",
+                BookId = "10",
+                Title = "STATEMENT TUNING",
+                Author = "CC",
                 BookmarkPage = 1,
                 BookmarkTime = DateTime.Now,
+                FileUrl = "https://s3-comp306-sjin-lab02.s3.ca-central-1.amazonaws.com/STATEMENT+TUNING+1133947360_350548.pdf",
+                FileKey = "STATEMENT TUNING 1133947360_350548.pdf",
+            });
 
+            list.Add(new Book
+            {
+                Id = "11",
+                UserId = "4",
+                BookId = "11",
+                Title = "COMM253  - Letter Formats",
+                Author = "CC English",
+                BookmarkPage = 1,
+                BookmarkTime = DateTime.Now,
+                FileUrl = "https://s3-comp306-sjin-lab02.s3.ca-central-1.amazonaws.com/letter+formats.pdf",
+                FileKey = "letter formats.pdf",
+            });
+
+
+
+            list.Add(new Book
+            {
+                Id = "12",
+                UserId = "4",
+                BookId = "12",
+                Title = "COMP_306 Outline",
+                Author = "CC COMP306",
+                BookmarkPage = 1,
+                BookmarkTime = DateTime.Now,
+                FileUrl = "https://s3-comp306-sjin-lab02.s3.ca-central-1.amazonaws.com/COMP_3061.pdf",
+                FileKey = "COMP_3061.pdf",
+            });
+
+            list.Add(new Book
+            {
+                Id = "13",
+                UserId = "5",
+                BookId = "13",
+                Title = "253 Week 4 22W",
+                Author = "CC",
+                BookmarkPage = 1,
+                BookmarkTime = DateTime.Now,
+                FileUrl = "https://s3-comp306-sjin-lab02.s3.ca-central-1.amazonaws.com/253+Week+4+22W.pdf",
+                FileKey = "253 Week 4 22W.pdf",
+            });
+
+            list.Add(new Book
+            {
+                Id = "14",
+                UserId = "5",
+                BookId = "14",
+                Title = "TOOL FOR ORACLE APPLICATION DEVELOPERS",
+                Author = "CC",
+                BookmarkPage = 1,
+                BookmarkTime = DateTime.Now,
+                FileUrl = "https://s3-comp306-sjin-lab02.s3.ca-central-1.amazonaws.com/TOAD+(TOOL+FOR+ORACLE+APPLICATION+DEVELOPERS)+1133947360_350547.pdf",
+                FileKey = "TOAD (TOOL FOR ORACLE APPLICATION DEVELOPERS) 1133947360_350547.pdf",
+            });
+            list.Add(new Book
+            {
+                Id = "15",
+                UserId = "5",
+                BookId = "15",
+                Title = "COMM253  - Letter Formats",
+                Author = "CC English",
+                BookmarkPage = 1,
+                BookmarkTime = DateTime.Now,
+                FileUrl = "https://s3-comp306-sjin-lab02.s3.ca-central-1.amazonaws.com/letter+formats.pdf",
+                FileKey = "letter formats.pdf",
             });
 
 
