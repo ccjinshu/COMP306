@@ -147,7 +147,7 @@ namespace Lab01
 
         private void Window_Activated(object sender, EventArgs e)
         {
-            
+            this.initDropDownBox();
         }
     }
 }

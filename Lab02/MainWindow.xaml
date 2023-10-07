@@ -1,0 +1,34 @@
+﻿<Window x:Class="Lab02.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Lab02"
+        mc:Ignorable="d"
+        Title="eBook Reader" Height="397" Width="535">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="215*"/>
+            <ColumnDefinition Width="100*"/>
+            <ColumnDefinition Width="324*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="89*"/>
+            <RowDefinition Height="92*"/>
+            <RowDefinition Height="83*"/>
+            <RowDefinition Height="93*"/>
+            <RowDefinition Height="63*"/>
+        </Grid.RowDefinitions>
+        <Label Content="User Name" HorizontalAlignment="Left" Margin="42,24,0,0" Grid.Row="1" VerticalAlignment="Top" Height="28" Width="98" FontSize="14"/>
+        <Label Content="Password" HorizontalAlignment="Left" Margin="42,68,0,0" Grid.Row="1" VerticalAlignment="Top" Height="38" Width="98" FontSize="14" Grid.RowSpan="2" />
+        <TextBox x:Name="TxtUserEmail" HorizontalAlignment="Left" Height="28" Margin="160,24,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="269" TextChanged="TxtUserEmail_TextChanged" FontSize="14" Grid.ColumnSpan="3"/>
+        <Button x:Name="BtnLogin" Content="Login" HorizontalAlignment="Left" Margin="37,56,0,0" Grid.Row="2" VerticalAlignment="Top" Width="146" Height="38" Background="#FFFAFAFA" Foreground="#FF486EF0" Click="BtnLogin_Click" FontSize="18" Grid.RowSpan="2" Grid.Column="2"/>
+        <Button x:Name="BtnSignup" Content="Sign Up" HorizontalAlignment="Left" Margin="91,56,0,0" Grid.Row="2" VerticalAlignment="Top" Width="138" Height="38" Foreground="White" Background="#FF486EF0" FontSize="18" Click="BtnSignup_Click" Grid.RowSpan="2" Grid.ColumnSpan="2"/>
+        <Label Grid.ColumnSpan="3" Content="Lab#2 Amazon DynamoDB Service" HorizontalAlignment="Left" Height="36" Margin="110,33,0,0" VerticalAlignment="Top" Width="333" FontSize="18"/>
+        <PasswordBox x:Name="TxtPassword" HorizontalAlignment="Left" Height="27" Margin="160,73,0,0" Grid.Row="1" VerticalAlignment="Top" Width="269" FontSize="14" Grid.ColumnSpan="3" Grid.RowSpan="2"/>
+        <StatusBar Grid.Row="4" Grid.ColumnSpan="3" Margin="0,23,0,0">
+            <Label Content="Shu Jin 301303882" Width="200"/>
+        </StatusBar>
+
+    </Grid>
+</Window>

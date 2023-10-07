@@ -1,0 +1,19 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Lab02"
+        xmlns:PdfViewer="clr-namespace:Syncfusion.Windows.PdfViewer;assembly=Syncfusion.PdfViewer.WPF" x:Class="Lab02.PdfViewer"
+        xmlns:syncfusion="clr-namespace:Syncfusion.Windows.PdfViewer;assembly=Syncfusion.PdfViewer.WPF"
+        mc:Ignorable="d"
+        Title="PdfViewer" Height="882" Width="1010"
+        Closed="Window_Closed">
+
+    <Grid x:Name="bookmarkButton">
+        <PdfViewer:PdfViewerControl x:Name="pdfviewer1" Margin="0,74,0,0"/>
+        <Button Content="Bookmark" HorizontalAlignment="Center" Margin="0,29,0,0" VerticalAlignment="Top" Click="Button_Click"/>
+        <Label x:Name="bookmarkLabel" Content="PageNo" HorizontalAlignment="Left" Margin="887,26,0,0" VerticalAlignment="Top" Width="51"/>
+        <Label Content="Last Bookmarked Page:" HorizontalAlignment="Left" Margin="754,26,0,0" VerticalAlignment="Top"/>
+    </Grid>
+</Window>
