@@ -7,7 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lab01", "Lab01\Lab01.csproj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lab02", "Lab02\Lab02.csproj", "{A5EF13BF-3E9A-45A6-B5E3-CF1710A69951}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COMP306_ShuJin_Lab2", "COMP306_ShuJin_Lab2\COMP306_ShuJin_Lab2.csproj", "{15D807FC-322C-49DE-9E8E-4164B6DBDCFC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "COMP306_ShuJin_Lab2", "COMP306_ShuJin_Lab2\COMP306_ShuJin_Lab2.csproj", "{15D807FC-322C-49DE-9E8E-4164B6DBDCFC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lab3_v0", "Lab3_v0\Lab3_v0.csproj", "{1DEBD6D1-5BBA-4320-986E-3A976A16F702}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAppAccess2RDS", "WebAppAccess2RDS\WebAppAccess2RDS.csproj", "{CA311516-9409-4EC8-923C-67E7D1C5C4DF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +31,14 @@ Global
 		{15D807FC-322C-49DE-9E8E-4164B6DBDCFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15D807FC-322C-49DE-9E8E-4164B6DBDCFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{15D807FC-322C-49DE-9E8E-4164B6DBDCFC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DEBD6D1-5BBA-4320-986E-3A976A16F702}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DEBD6D1-5BBA-4320-986E-3A976A16F702}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DEBD6D1-5BBA-4320-986E-3A976A16F702}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DEBD6D1-5BBA-4320-986E-3A976A16F702}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA311516-9409-4EC8-923C-67E7D1C5C4DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA311516-9409-4EC8-923C-67E7D1C5C4DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA311516-9409-4EC8-923C-67E7D1C5C4DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA311516-9409-4EC8-923C-67E7D1C5C4DF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

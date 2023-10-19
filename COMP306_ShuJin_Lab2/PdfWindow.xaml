@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:COMP306_ShuJin_Lab2" xmlns:syncfusion="clr-namespace:Syncfusion.Windows.PdfViewer;assembly=Syncfusion.PdfViewer.WPF"
         mc:Ignorable="d"
-        Title="Pdf Viewer  " Height="1000" Width="1200"    >
+        Title="Pdf Viewer  " Height="600" Width="800"    >
     <Grid>
         <syncfusion:PdfViewerControl x:Name="PdfViewer" />
         <Button Content="Bookmark" Click="BookmarkButton_Click" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10"/>

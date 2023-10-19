@@ -13,12 +13,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.0.75" />
-    <PackageReference Include="AWSSDK.S3" Version="3.7.3.7" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
-    <PackageReference Include="Syncfusion.PdfViewer.WPF" Version="19.3.0.44" />
+    <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.203.5" />
+    <PackageReference Include="AWSSDK.S3" Version="3.7.205.13" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
+    <PackageReference Include="Syncfusion.PdfViewer.WPF" Version="23.1.41" />
   </ItemGroup>
 
   <ItemGroup>
