@@ -21,10 +21,11 @@ public partial class SmsContext : DbContext
 
     public virtual DbSet<Student> Students { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=mssqlserver4api.ckzguj8xfpkc.ca-central-1.rds.amazonaws.com;Database=SMS;User ID=sasj;Password=qq12345665;Encrypt=False");
-
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) 
+    {
+         
+        //optionsBuilder.UseSqlServer
+    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Course>(entity =>
