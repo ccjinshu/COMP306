@@ -1,3 +1,6 @@
+using Lab03.Models;
+using Microsoft.EntityFrameworkCore;
+
 namespace Lab03
 {
     public class Program
@@ -8,6 +11,9 @@ namespace Lab03
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            // Add services to the container.
+            builder.Services.AddDbContext<Lab3MovieWebContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection_local")));
 
             var app = builder.Build();
 

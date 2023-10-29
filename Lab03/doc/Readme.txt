@@ -20,7 +20,9 @@ Install-Package AWSSDK.Extensions.NETCore.Setup -Version 3.3.100
 Install-Package AWSSDK.S3 -Version 3.3.100
 
 
+dotnet tool install --global dotnet-ef
 
+dotnet ef dbcontext scaffold "YourConnectionString" Microsoft.EntityFrameworkCore.SqlServer -o Models
 
 
 
