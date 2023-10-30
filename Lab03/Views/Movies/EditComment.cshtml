@@ -1,52 +1,47 @@
-﻿@model Lab03.Models.Comment 
+﻿@model Lab03.Models.Comment
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Edit";
 }
 
-<h1>Comment and Rating </h1>
+<h1>Edit Comment and Rating</h1>
 
-<div>
-    <h4>Comment and Rating  -- @ViewBag.movie.Title </h4>
-    <hr />
-    
-</div>
-
-<div>
-    <a asp-action="Download" asp-route-id="@Model?.Id">Download</a> |
-    <a asp-action="AddComment" asp-route-id="@Model?.Id">Comment Add Rating</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
-
-
-<br />
-<h2>Comments</h2>
-
- 
+<h4> for - @ViewBag.movie.Title  </h4>
+<hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="AddComment">
+        <form asp-action="UpdateComment" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-             <input type="hidden" id="movieId" name="movieId" value="@ViewBag.movie.Id" />
+            <input type="hidden" id="movieId" name="movieId" value="@ViewBag.movie.Id" />
+            <input type="hidden" id="commentId" name="commentId" value="@Model.Id" /> 
             <input type="hidden" id="UserId" name="UserId" value="@Model.UserId" />
-
+            <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="Content" class="control-label"></label>
                 <input asp-for="Content" class="form-control" />
                 <span asp-validation-for="Content" class="text-danger"></span>
             </div> 
-  
+            
             <div class="form-group">
                 <label asp-for="Rating" class="control-label"></label>
                 <input asp-for="Rating" class="form-control" />
                 <span asp-validation-for="Rating" class="text-danger"></span>
-            </div><br />
+            </div><br>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary" /> |
+                <a asp-action="Details" asp-route-id="@ViewBag.movie.Id">Back to Movie</a>
+
+
+
             </div>
         </form>
     </div>
 </div>
 
+ 
 
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

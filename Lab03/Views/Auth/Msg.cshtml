@@ -1,0 +1,37 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Lab03</h1>
+      
+
+    
+
+
+
+       
+
+    @{
+        if (ViewBag.Message != null && ViewBag.Message != "")
+            {
+               
+                <h3 style="color:blue"> @ViewBag.Message    </h3>
+
+            <br>
+            <br>
+               
+            <a href="javascript:history.go(-1);">Return</a>
+            }
+    }
+
+     
+
+
+     
+    
+
+
+
+
+</div>

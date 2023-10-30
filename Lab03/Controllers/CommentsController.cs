@@ -10,7 +10,7 @@ using Lab03.AWS;
 
 namespace Lab03.Controllers
 {
-    public class CommentsController : Controller
+    public class CommentsController : AuthController
     {
         private readonly Lab3MovieWebContext _context;
         private readonly DynamoDBHelper _dynamoDbHelper = new DynamoDBHelper();

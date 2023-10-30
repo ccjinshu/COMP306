@@ -36,7 +36,11 @@ public partial class Movie
     [DynamoDBProperty]
     public string FileUrl { get; set; }
 
-   
+
+    [DynamoDBProperty]
+    public string UploaderId { get; set; }
+
+
     [DynamoDBProperty]
     [BindNever] 
     public List<Comment> Comments { get; set; }

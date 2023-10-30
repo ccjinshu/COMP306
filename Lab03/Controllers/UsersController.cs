@@ -189,7 +189,15 @@ namespace Lab03.Controllers
 
 
 
-        //login user
+        //Logout user
+        public IActionResult Logout()
+        { 
+            //remove session
+            HttpContext.Session.Remove("loginName");
+            HttpContext.Session.Remove("loginUserId");
+            HttpContext.Session.Clear();
+            return RedirectToAction("Index", "Home"); //  redirect to index page
+        }
 
         // GET: Users/Create
         public IActionResult Login()

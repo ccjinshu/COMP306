@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Lab03.Controllers
 {
-    public class MoviesController : Controller
+    public class MoviesController : AuthController
     {
         //private readonly Lab3MovieWebContext _context;
         DynamoDBHelper _dynamoDbHelper = new DynamoDBHelper();
@@ -32,7 +32,7 @@ namespace Lab03.Controllers
         //                View(await _context.Movies.ToListAsync()) :
         //                Problem("Entity set 'Lab3MovieWebContext.Movies'  is null."); 
         //}
-      
+
         // GET: Movies/Details/5
         public async Task<IActionResult> Details(string id)
         {
@@ -48,7 +48,7 @@ namespace Lab03.Controllers
             }
 
 
-            return View(movie); 
+            return View(movie);
         }
 
         // GET: Movies/Create
@@ -58,8 +58,8 @@ namespace Lab03.Controllers
             comment.MovieId = movieId;
             ViewData["movieId"] = movieId;
             ViewData["comment"] = comment;
-            return View( comment);
-             
+            return View(comment);
+
         }
 
         // POST: Movies/Create
@@ -84,7 +84,7 @@ namespace Lab03.Controllers
 
 
                 var errors = ModelState.Values.SelectMany(v => v.Errors);
-                String msg=errors.Aggregate("", (current, error) => current + error.ErrorMessage);
+                String msg = errors.Aggregate("", (current, error) => current + error.ErrorMessage);
                 ViewData["ErrorMessage"] = "Please correct the validation errors." + msg;
                 return View(movie);
             }
@@ -95,9 +95,9 @@ namespace Lab03.Controllers
                 //_context.Add(movie);
                 //await _context.SaveChangesAsync();
 
-              var x=     await   _dynamoDbHelper.AddMovieAsync(movie);
+                var x = await _dynamoDbHelper.AddMovieAsync(movie);
                 //print log
-                Console.WriteLine("Add movie:" + x);  
+                Console.WriteLine("Add movie:" + x);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -105,7 +105,7 @@ namespace Lab03.Controllers
         }
 
         // GET: Movies/Edit/5
-        
+
         public async Task<IActionResult> Edit(string id)
         {
             if (string.IsNullOrEmpty(id))
@@ -117,7 +117,17 @@ namespace Lab03.Controllers
             if (movie == null)
             {
                 return NotFound();
-            } 
+            }
+
+            //check movie uploader is current login user
+            if (movie.UploaderId != base.LoginUserId)
+            {
+                var msg = "It is not your movie. You can not edit it.";
+                return base.ShowError(msg);
+
+            }
+
+
             return View(movie);
         }
 
@@ -138,6 +148,22 @@ namespace Lab03.Controllers
             {
                 return NotFound();
             }
+
+            var movie1 = await _dynamoDbHelper.GetMovieAsync(id);
+            if (movie1 == null)
+            {
+                return NotFound();
+            }
+
+            //check movie uploader is current login user
+            if (movie1.UploaderId != base.LoginUserId)
+            {
+                var msg = "It is not your movie. You can not edit it.";
+                return base.ShowError(msg);
+
+            }
+
+
 
             if (ModelState.IsValid)
             {
@@ -172,6 +198,13 @@ namespace Lab03.Controllers
                 return NotFound();
             }
 
+            //check movie uploader is current login user
+            if (movie.UploaderId != base.LoginUserId)
+            {
+                var msg = "It is not your movie. You can not delete it.";
+                return base.ShowError(msg);
+            }
+
             return View(movie);
         }
 
@@ -185,7 +218,22 @@ namespace Lab03.Controllers
                 return NotFound();
             }
 
-              await _dynamoDbHelper.DeleteMovieAsync(id);
+            var movie1 = await _dynamoDbHelper.GetMovieAsync(id);
+            if (movie1 == null)
+            {
+                return NotFound();
+            }
+
+            //check movie uploader is current login user
+            if (movie1.UploaderId != base.LoginUserId)
+            {
+                var msg = "It is not your movie. You can not delete it.";
+                return base.ShowError(msg);
+
+            }
+
+
+            await _dynamoDbHelper.DeleteMovieAsync(id);
             Console.WriteLine("Delete movie  : " + id);
 
             return RedirectToAction(nameof(Index));
@@ -206,8 +254,8 @@ namespace Lab03.Controllers
             try
             {
                 if (ModelState.IsValid)
-                { 
-                   await _dynamoDbHelper.AddMovieAsync(movie); 
+                {
+                    await _dynamoDbHelper.AddMovieAsync(movie);
 
                     return RedirectToAction("Index", "Movies"); //  redirect to index page
                 }
@@ -218,7 +266,7 @@ namespace Lab03.Controllers
             }
             catch (Exception ex)
             {
-                
+
                 ModelState.AddModelError("", "error when add movie：" + ex.Message);
                 return View(movie);
             }
@@ -227,9 +275,9 @@ namespace Lab03.Controllers
         //  get all movies
         [HttpGet]
         public async Task<IActionResult> Index()
-        { 
+        {
 
-            var allMovies = await _dynamoDbHelper.GetAllMoviesAsync(); 
+            var allMovies = await _dynamoDbHelper.GetAllMoviesAsync();
             return View(allMovies);
         }
 
@@ -238,7 +286,7 @@ namespace Lab03.Controllers
         public async Task<IActionResult> Index(MovieGenre selectedGenre, double? minRating, double? maxRating)
         {
 
-            var movies    = await _dynamoDbHelper.QueryMoviesByFiltersAsync(selectedGenre, minRating, maxRating);
+            var movies = await _dynamoDbHelper.QueryMoviesByFiltersAsync(selectedGenre, minRating, maxRating);
 
 
             //return minRating to view
@@ -246,7 +294,7 @@ namespace Lab03.Controllers
             ViewData["maxRating"] = maxRating;
             ViewData["selectedGenre"] = selectedGenre;
 
-            
+
 
 
 
@@ -261,7 +309,7 @@ namespace Lab03.Controllers
             //create some demo data
             await _dynamoDbHelper.GenerateMoviesData();
 
- 
+
             return Ok("Init movie data success");
         }
 
@@ -308,6 +356,7 @@ namespace Lab03.Controllers
                 comment.UserId = loginUserId;
                 comment.UpdateTime = DateTime.Now;
                 comment.Id = Guid.NewGuid().ToString();
+                ViewBag.comment = comment;
                 return View(comment);
             }
             catch (Exception ex)
@@ -324,9 +373,9 @@ namespace Lab03.Controllers
 
         //add comment ,Post
         [HttpPost]
-        public async Task<IActionResult> AddComment( Comment comment )
+        public async Task<IActionResult> AddComment(Comment comment)
         {
-           
+
             try
             {
                 if (ModelState.IsValid)
@@ -360,7 +409,7 @@ namespace Lab03.Controllers
                     comment.UpdateTime = DateTime.Now;
                     comment.Id = Guid.NewGuid().ToString();
                     movie.Comments.Add(comment);
-                     
+
 
                     //update movie
                     await _dynamoDbHelper.UpdateMovieAsync(movie);
@@ -381,7 +430,7 @@ namespace Lab03.Controllers
         }
 
 
-        public async Task<IActionResult> DeleteComment(string movieId,string commentId)
+        public async Task<IActionResult> DeleteComment(string movieId, string commentId)
         {
             var id = movieId;
             if (string.IsNullOrEmpty(id))
@@ -403,6 +452,16 @@ namespace Lab03.Controllers
             }
             ViewBag.movie = movie;
             ViewBag.comment = comment;
+
+
+            //check comment author is current login user
+            if (comment.UserId != base.LoginUserId)
+            {
+                var msg = "It is not your comment. You can not delete it.";
+                return base.ShowError(msg);
+
+            }
+
 
             return View(comment);
         }
@@ -428,7 +487,7 @@ namespace Lab03.Controllers
             {
                 return NotFound();
             }
-            
+
             //delete comment
             movie.Comments.Remove(comment);
             //update movie
@@ -437,7 +496,7 @@ namespace Lab03.Controllers
 
             ViewBag.movie = movie;
             ViewBag.comment = comment;
-            
+
             //return to details page
             return RedirectToAction("Details", "Movies", movie); //  redirect to index page
 
@@ -445,6 +504,97 @@ namespace Lab03.Controllers
         }
 
 
+        //GET : Movies/EditComment/5 
+        public async Task<IActionResult> EditComment(string movieId, string commentId)
+        {
+            var id = movieId;
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound();
+            }
+
+            var movie = await _dynamoDbHelper.GetMovieAsync(id);
+            if (movie == null)
+            {
+                return NotFound();
+            }
+
+            //get comment
+            var comment = movie.Comments.FirstOrDefault(c => c.Id == commentId);
+            if (comment == null)
+            {
+                return NotFound();
+            }
+
+            ViewBag.movie = movie;
+            ViewBag.comment = comment;
+
+            //check comment author is current login user
+            if (comment.UserId != base.LoginUserId)
+            { 
+                var msg = "It is not your comment. You can not edit it."; 
+                return base.ShowError(msg);
+
+            }
+
+           
+
+            return View(comment);
+        }
+
+        //Post : Movies/EditComment/5 
+        [HttpPost]
+        public async Task<IActionResult> UpdateComment(Comment comment)
+        {
+
+            var loginUserId = HttpContext.Session.GetString("loginUserId");
+
+
+
+
+            var movieId = comment.MovieId;
+            var commentId = comment.Id;
+            if (string.IsNullOrEmpty(movieId))
+            {
+                return NotFound();
+            }
+
+            var movie = await _dynamoDbHelper.GetMovieAsync(movieId);
+            if (movie == null)
+            {
+                return NotFound();
+            }
+
+            //get comment
+            Comment comment1 = movie.Comments.FirstOrDefault(c => c.Id == commentId);
+            if (comment1 == null)
+            {
+                return NotFound();
+            }
+
+
+            //check comment author is current login user
+            if (comment1.UserId != loginUserId)
+            {
+                return Problem("You are not the author of this comment.");
+            }
+
+
+            //update comment
+            comment1.UpdateTime = DateTime.Now;
+            comment1.Content = comment.Content;
+            comment1.Rating = comment.Rating;
+            comment1.UserId = loginUserId;
+
+            //update movie
+            await _dynamoDbHelper.UpdateMovieAsync(movie);
+
+            ViewBag.movie = movie;
+            ViewBag.comment = comment1;
+            //return to details page
+            return RedirectToAction("Details", "Movies", movie); //  redirect to index page 
+             
+        }
 
     }
 }

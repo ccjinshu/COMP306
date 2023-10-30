@@ -4,21 +4,24 @@ using System.Diagnostics;
 
 namespace Lab03.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : AuthController
     {
-        private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
 
         public IActionResult Index()
         {
-            //get current user's login name
-            var loginName = HttpContext.Session.GetString("loginName");
-            ViewBag.Message = "Welcome " + loginName;
+            ////get current user's login name
+            //var loginName = HttpContext.Session.GetString("loginName");
+
+            ////if user is not logged in, redirect to login page
+            //if (loginName != null && loginName != "")
+            //{ 
+            //    ViewBag.Message = "Login successfully!";
+            //    ViewBag.LoginName = loginName;
+            //}
             return View();
+
+
         }
 
         public IActionResult Privacy()

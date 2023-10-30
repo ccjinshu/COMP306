@@ -3,19 +3,31 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-
-
+    <h1 class="display-4">Lab03</h1>
+      
 
     
 
 
 
-        <h3>@ViewBag.Message</h3>
+       
 
+    @{ if (ViewBag.LoginName!=null && ViewBag.LoginName!="")
+            {
+                <h2> Welcome  @ViewBag.LoginName</h2>
+                
+                <a href="@Url.Action("Index", "Movies")">Movies</a>
+                  <a href="@Url.Action("Logout","Users")">Logout</a>
+            }
+            else
+            {
+                <h2> Welcome Guest</h2>
+                <a href="@Url.Action("Register", "Users")">Register</a>
+                <a href="@Url.Action("Login", "Users")">Login</a>
+            }
+    }
 
-    <a href="@Url.Action("Logout","Users")">Logout</a>
+     
 
 
      

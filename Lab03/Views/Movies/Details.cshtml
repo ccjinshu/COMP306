@@ -106,9 +106,8 @@
                     @Html.DisplayFor(modelItem => item.Rating)
                 </td>
                 <td>
-                    <a asp-controller="Comments"   asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-controller="Comments" asp-action="Details" asp-route-id="@item.Id">Details</a> |  
-                    <a href="@Url.Action("DeleteComment","Movies" ,new  { movieId=@Model.Id, commentId=  @item.Id })">Delete2</a>
+                    <a href="@Url.Action("EditComment","Movies" ,new  { movieId=@Model.Id, commentId=  @item.Id })">Edit</a>
+                    <a href="@Url.Action("DeleteComment","Movies" ,new  { movieId=@Model.Id, commentId=  @item.Id })">Delete</a>
 
 
                 </td>
@@ -116,6 +115,13 @@
         }
     </tbody>
 </table>
+
+@if (!string.IsNullOrEmpty(ViewData["ErrorMessage"] as string))
+{
+    <div class="alert alert-danger">
+        @ViewData["ErrorMessage"]
+    </div>
+}
 
 
 
