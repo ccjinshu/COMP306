@@ -120,7 +120,7 @@ namespace Lab03.Controllers
             }
 
             //check movie uploader is current login user
-            if (movie.UploaderId != base.LoginUserId)
+            if (movie.UploaderId != null && movie.UploaderId != base.LoginUserId)
             {
                 var msg = "It is not your movie. You can not edit it.";
                 return base.ShowError(msg);
@@ -159,7 +159,7 @@ namespace Lab03.Controllers
             }
 
             //check movie uploader is current login user
-            if (movie1.UploaderId != base.LoginUserId)
+            if (movie1.UploaderId !=null && movie1.UploaderId != base.LoginUserId)
             {
                 var msg = "It is not your movie. You can not edit it.";
                 return base.ShowError(msg);
@@ -289,6 +289,7 @@ namespace Lab03.Controllers
         {
 
             var allMovies = await _dynamoDbHelper.GetAllMoviesAsync();
+            allMovies = allMovies.OrderByDescending(m => m.UpldateTime).ThenByDescending(m => m.Rating).ToList();
             return View(allMovies);
         }
 
@@ -297,7 +298,8 @@ namespace Lab03.Controllers
         public async Task<IActionResult> Index(MovieGenre selectedGenre, double? minRating, double? maxRating)
         {
 
-            var movies = await _dynamoDbHelper.QueryMoviesByFiltersAsync(selectedGenre, minRating, maxRating);
+            var movies = await _dynamoDbHelper.QueryMoviesByFiltersAsync(selectedGenre, minRating, maxRating); 
+          
 
 
             //return minRating to view

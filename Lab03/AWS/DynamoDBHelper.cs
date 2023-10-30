@@ -238,7 +238,10 @@ namespace Lab03.AWS
                 IndexName = useIndex, // 使用 GenreIndex 二级索引
             };
 
-            var  movies = await _dynamoDBContext.ScanAsync<Movie> (filters).GetRemainingAsync();
+            //orderby update time and rating
+            var movies = await _dynamoDBContext.ScanAsync<Movie>(filters, config).GetRemainingAsync();
+            movies = movies.OrderByDescending(m => m.UpldateTime).ThenByDescending(m => m.Rating).ToList();
+             
              
 
             return movies;
