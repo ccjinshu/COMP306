@@ -1,77 +1,43 @@
 ﻿@model IEnumerable<Lab03.Models.Movie>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Movie List";
 }
 
-<h1>Index</h1>
+<h1>Movie List</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a class="btn btn-primary" asp-action="Create">Create New Movie</a>
 </p>
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Genre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Director)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ReleaseTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Rating)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CoverImage)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FileKey)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FileUrl)
-            </th>
-            <th></th>
+            <th>Cover</th>
+            <th>Details</th>
+            <th>Rating</th>
+            <th>Actions</th> <!-- 新增一个表头列用于操作按钮 -->
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Genre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Director)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReleaseTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Rating)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CoverImage)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FileKey)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FileUrl)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td><img src="@item.CoverImage" alt="@item.Title" style="max-width: 100px;" /></td>
+                <td>
+                    <strong>Title:</strong> @item.Title<br />
+                    <strong>Genre:</strong> @item.Genre<br />
+                    <strong>Director:</strong> @item.Director<br />
+                    <strong>Release Date:</strong> @String.Format("{0:yyyy-MM-dd}", item.ReleaseTime)<br />
+                </td>
+                <td>
+                    <strong>Rating:</strong> @item.Rating<br />
+                </td>
+                <td>
+                    <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

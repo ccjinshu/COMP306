@@ -13,5 +13,9 @@ public partial class Comment
 
     public DateTime? UpdateTime { get; set; }
 
-    public decimal? Rating { get; set; }
+    public double Rating { get; set; }
+
+    
+
 }
+ 

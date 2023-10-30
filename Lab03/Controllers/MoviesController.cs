@@ -6,12 +6,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Lab03.Models;
+using NuGet.Protocol;
+using Amazon.DynamoDBv2;
+using Amazon.DynamoDBv2.DocumentModel;
+using Lab03.AWS;
+using Microsoft.Extensions.Azure;
 
 namespace Lab03.Controllers
 {
     public class MoviesController : Controller
     {
         private readonly Lab3MovieWebContext _context;
+        DynamoDBHelper _dynamoDbHelper = new DynamoDBHelper();
 
         public MoviesController(Lab3MovieWebContext context)
         {
@@ -19,13 +25,13 @@ namespace Lab03.Controllers
         }
 
         // GET: Movies
-        public async Task<IActionResult> Index()
-        {
-              return _context.Movies != null ? 
-                          View(await _context.Movies.ToListAsync()) :
-                          Problem("Entity set 'Lab3MovieWebContext.Movies'  is null.");
-        }
-
+        //public async Task<IActionResult> Index()
+        //{
+        //    return _context.Movies != null ?
+        //                View(await _context.Movies.ToListAsync()) :
+        //                Problem("Entity set 'Lab3MovieWebContext.Movies'  is null."); 
+        //}
+      
         // GET: Movies/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -57,10 +63,36 @@ namespace Lab03.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Title,Genre,Director,ReleaseTime,Rating,CoverImage,FileKey,FileUrl")] Movie movie)
         {
+            ModelState.Remove("Comments");
+
+            if (!ModelState.IsValid)
+            {
+
+                foreach (var modelStateEntry in ModelState.Values)
+                {
+                    foreach (var error in modelStateEntry.Errors)
+                    {
+                        Console.WriteLine($"Model Error: {error.ErrorMessage}");
+                    }
+                }
+
+
+                var errors = ModelState.Values.SelectMany(v => v.Errors);
+                String msg=errors.Aggregate("", (current, error) => current + error.ErrorMessage);
+                ViewData["ErrorMessage"] = "Please correct the validation errors." + msg;
+                return View(movie);
+            }
+
+
             if (ModelState.IsValid)
             {
-                _context.Add(movie);
-                await _context.SaveChangesAsync();
+                //_context.Add(movie);
+                //await _context.SaveChangesAsync();
+
+              var x=     await   _dynamoDbHelper.AddMovieAsync(movie);
+                //print log
+                Console.WriteLine("Add movie:" + x);  
+
                 return RedirectToAction(nameof(Index));
             }
             return View(movie);
@@ -158,5 +190,56 @@ namespace Lab03.Controllers
         {
           return (_context.Movies?.Any(e => e.Id == id)).GetValueOrDefault();
         }
+
+        //
+
+        // 处理添加电影的 POST 请求
+        [HttpPost]
+        public async Task<IActionResult> AddMovie(Movie movie)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+
+
+                    // 创建 Movie 对象并设置 Id
+
+
+                    // 将电影信息存储到 DynamoDB 表中
+                   await _dynamoDbHelper.AddMovieAsync(movie);
+
+
+
+                    return RedirectToAction("Index", "Movies"); // 添加成功后重定向到电影列表页面
+                }
+                else
+                {
+                    return View(movie);
+                }
+            }
+            catch (Exception ex)
+            {
+                // 处理异常情况
+                ModelState.AddModelError("", "添加电影时出错：" + ex.Message);
+                return View(movie);
+            }
+        }
+
+        // 查询全部电影列表
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            //create some demo data
+            //await _dynamoDbHelper.GenerateMoviesData();
+
+
+            var allMovies = await _dynamoDbHelper.GetAllMoviesAsync(); 
+            return View(allMovies);
+        }
+
+        //return Ok(allMovies);
+
+
     }
 }
