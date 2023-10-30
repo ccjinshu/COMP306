@@ -7,15 +7,16 @@ namespace Lab03.Models;
 [DynamoDBTable("Movies")]
 
 public partial class Movie
-{
-    [DynamoDBHashKey] // 主键
-    public int Id { get; set; }
+{ 
+    [DynamoDBHashKey]
+    public string Id { get; set; } // 使用 Guid 作为主键的一部分
+
 
     [DynamoDBProperty] // 标记为 DynamoDB 属性
     public string Title { get; set; }
 
     [DynamoDBProperty]
-    public string Genre { get; set; }
+    public MovieGenre Genre { get; set; }
 
     [DynamoDBProperty]
     public string Director { get; set; }
@@ -40,6 +41,12 @@ public partial class Movie
     [BindNever] 
     public List<Comment> Comments { get; set; }
 
-    
+    //constructor
+    public Movie()
+    {
+        Comments = new List<Comment>();
+        Id = Guid.NewGuid().ToString();
+
+    }
 
 }

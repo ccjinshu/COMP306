@@ -16,12 +16,12 @@ namespace Lab03.Controllers
 {
     public class MoviesController : Controller
     {
-        private readonly Lab3MovieWebContext _context;
+        //private readonly Lab3MovieWebContext _context;
         DynamoDBHelper _dynamoDbHelper = new DynamoDBHelper();
 
         public MoviesController(Lab3MovieWebContext context)
         {
-            _context = context;
+            //_context = context;
         }
 
         // GET: Movies
@@ -33,21 +33,20 @@ namespace Lab03.Controllers
         //}
       
         // GET: Movies/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(string id)
         {
-            if (id == null || _context.Movies == null)
+            if (string.IsNullOrEmpty(id))
             {
                 return NotFound();
             }
 
-            var movie = await _context.Movies
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var movie = await _dynamoDbHelper.GetMovieAsync(id);
             if (movie == null)
             {
                 return NotFound();
             }
 
-            return View(movie);
+            return View(movie); 
         }
 
         // GET: Movies/Create
@@ -99,18 +98,18 @@ namespace Lab03.Controllers
         }
 
         // GET: Movies/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(string id)
         {
-            if (id == null || _context.Movies == null)
+            if (string.IsNullOrEmpty(id))
             {
                 return NotFound();
             }
 
-            var movie = await _context.Movies.FindAsync(id);
+            var movie = await _dynamoDbHelper.GetMovieAsync(id);
             if (movie == null)
             {
                 return NotFound();
-            }
+            } 
             return View(movie);
         }
 
@@ -119,8 +118,13 @@ namespace Lab03.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Genre,Director,ReleaseTime,Rating,CoverImage,FileKey,FileUrl")] Movie movie)
+        public async Task<IActionResult> Edit(string id, [Bind("Id,Title,Genre,Director,ReleaseTime,Rating,CoverImage,FileKey,FileUrl")] Movie movie)
         {
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound();
+            }
+
             if (id != movie.Id)
             {
                 return NotFound();
@@ -130,35 +134,30 @@ namespace Lab03.Controllers
             {
                 try
                 {
-                    _context.Update(movie);
-                    await _context.SaveChangesAsync();
+                    var result = await _dynamoDbHelper.UpdateMovieAsync(movie);
+                    Console.WriteLine("Update movie result: " + result);
+
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Exception ex)
                 {
-                    if (!MovieExists(movie.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    ModelState.AddModelError("", "更新电影时出错：" + ex.Message);
+                    return View(movie);
                 }
-                return RedirectToAction(nameof(Index));
             }
+
             return View(movie);
         }
 
         // GET: Movies/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(string id)
         {
-            if (id == null || _context.Movies == null)
+            if (string.IsNullOrEmpty(id))
             {
                 return NotFound();
             }
 
-            var movie = await _context.Movies
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var movie = await _dynamoDbHelper.GetMovieAsync(id);
             if (movie == null)
             {
                 return NotFound();
@@ -170,25 +169,23 @@ namespace Lab03.Controllers
         // POST: Movies/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            if (_context.Movies == null)
+            if (string.IsNullOrEmpty(id))
             {
-                return Problem("Entity set 'Lab3MovieWebContext.Movies'  is null.");
+                return NotFound();
             }
-            var movie = await _context.Movies.FindAsync(id);
-            if (movie != null)
-            {
-                _context.Movies.Remove(movie);
-            }
-            
-            await _context.SaveChangesAsync();
+
+              await _dynamoDbHelper.DeleteMovieAsync(id);
+            Console.WriteLine("Delete movie  : " + id);
+
             return RedirectToAction(nameof(Index));
         }
 
-        private bool MovieExists(int id)
+        private async Task<bool> MovieExists(string id)
         {
-          return (_context.Movies?.Any(e => e.Id == id)).GetValueOrDefault();
+            var movie = await _dynamoDbHelper.GetMovieAsync(id);
+            return movie != null;
         }
 
         //
@@ -230,15 +227,33 @@ namespace Lab03.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            //create some demo data
-            //await _dynamoDbHelper.GenerateMoviesData();
-
+          
 
             var allMovies = await _dynamoDbHelper.GetAllMoviesAsync(); 
             return View(allMovies);
         }
+        [HttpPost]
+        public async Task<IActionResult> Index(MovieGenre selectedGenre, double? minRating, double? maxRating)
+        {
 
-        //return Ok(allMovies);
+            var movies    = await _dynamoDbHelper.QueryMoviesByGenreAsync(selectedGenre);  // 获取所有电影数据
+
+             
+
+            return View(movies);
+        }
+
+
+        // 查询全部电影列表
+        [HttpGet]
+        public async Task<IActionResult> Init()
+        {
+            //create some demo data
+            await _dynamoDbHelper.GenerateMoviesData();
+
+ 
+            return Ok("Init movie data success");
+        }
 
 
     }

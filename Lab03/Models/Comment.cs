@@ -5,7 +5,7 @@ namespace Lab03.Models;
 
 public partial class Comment
 {
-    public int Id { get; set; }
+    public string Id { get; set; }
 
     public string Content { get; set; } = null!;
 
@@ -16,6 +16,11 @@ public partial class Comment
     public double Rating { get; set; }
 
     
+    //constructor
+    public Comment()
+    {
+        Id = Guid.NewGuid().ToString();
+    }
 
 }
  

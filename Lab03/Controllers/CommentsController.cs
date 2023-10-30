@@ -35,7 +35,7 @@ namespace Lab03.Controllers
             }
 
             var comment = await _context.Comments
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.Id.Equals( id));
             if (comment == null)
             {
                 return NotFound();
@@ -67,7 +67,7 @@ namespace Lab03.Controllers
         }
 
         // GET: Comments/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(string id)
         {
             if (id == null || _context.Comments == null)
             {
@@ -87,9 +87,9 @@ namespace Lab03.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Content,UserId,UpdateTime,Rating")] Comment comment)
+        public async Task<IActionResult> Edit(string id, [Bind("Id,Content,UserId,UpdateTime,Rating")] Comment comment)
         {
-            if (id != comment.Id)
+            if (!id.Equals( comment.Id))
             {
                 return NotFound();
             }
@@ -118,7 +118,7 @@ namespace Lab03.Controllers
         }
 
         // GET: Comments/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(string id)
         {
             if (id == null || _context.Comments == null)
             {
@@ -138,7 +138,7 @@ namespace Lab03.Controllers
         // POST: Comments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(string id)
         {
             if (_context.Comments == null)
             {
@@ -154,9 +154,9 @@ namespace Lab03.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CommentExists(int id)
+        private bool CommentExists(string id)
         {
-          return (_context.Comments?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.Comments?.Any(e => e.Id.Equals(id))).GetValueOrDefault();
         }
     }
 }
