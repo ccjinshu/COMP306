@@ -343,7 +343,7 @@ namespace Lab03.AWS
                 {
                     //Id = 1,
                     Content = "Great movie!",
-                    UserId = 1,
+                    UserId = "1",
                     UpdateTime = DateTime.UtcNow,
                     Rating = 9.0
                 },
@@ -351,7 +351,7 @@ namespace Lab03.AWS
                 {
                     //Id = 2,
                     Content = "One of the best Westerns!",
-                    UserId = 2,
+                    UserId = "2",
                     UpdateTime = DateTime.UtcNow,
                     Rating = 8.5
                 }
@@ -374,7 +374,7 @@ namespace Lab03.AWS
                 {
                     //Id = 3,
                     Content = "Awesome action scenes!",
-                    UserId = 3,
+                    UserId = "3",
                     UpdateTime = DateTime.UtcNow,
                     Rating = 8.7
                 },
@@ -382,7 +382,7 @@ namespace Lab03.AWS
                 {
                     //Id = 4,
                     Content = "Classic action movie!",
-                    UserId = 4,
+                    UserId = "4",
                     UpdateTime = DateTime.UtcNow,
                     Rating = 8.5
                 }
@@ -405,7 +405,7 @@ namespace Lab03.AWS
                 {
                     //Id = 5,
                     Content = "Epic space adventure!",
-                    UserId = 5,
+                    UserId = "5",
                     UpdateTime = DateTime.UtcNow,
                     Rating = 9.0
                 },
@@ -413,7 +413,7 @@ namespace Lab03.AWS
                 {
                     //Id = 6,
                     Content = "May the Force be with you!",
-                    UserId = 6,
+                    UserId = "1",
                     UpdateTime = DateTime.UtcNow,
                     Rating = 8.8
                 }
@@ -436,7 +436,7 @@ namespace Lab03.AWS
                 {
                     //Id = 7,
                     Content = "Fun for all ages!",
-                    UserId = 7,
+                    UserId = "1",
                     UpdateTime = DateTime.UtcNow,
                     Rating = 8.5
                 },
@@ -444,7 +444,7 @@ namespace Lab03.AWS
                 {
                     //Id = 8,
                     Content = "Love the characters!",
-                    UserId = 8,
+                    UserId = "2",
                     UpdateTime = DateTime.UtcNow,
                     Rating = 8.0
                 }
@@ -467,7 +467,7 @@ namespace Lab03.AWS
                 {
                     //Id = 9,
                     Content = "Stunning visuals!",
-                    UserId = 9,
+                    UserId = "1",
                     UpdateTime = DateTime.UtcNow,
                     Rating = 8.0
                 },
@@ -475,7 +475,7 @@ namespace Lab03.AWS
                 {
                     //Id = 10,
                     Content = "Great world-building!",
-                    UserId = 10,
+                    UserId = "2",
                     UpdateTime = DateTime.UtcNow,
                     Rating = 8.2
                 }
@@ -498,7 +498,7 @@ namespace Lab03.AWS
                 {
                     //Id = 11,
                     Content = "Mind-bending!",
-                    UserId = 11,
+                    UserId = "1",
                     UpdateTime = DateTime.UtcNow,
                     Rating = 9.0
                 },
@@ -506,7 +506,7 @@ namespace Lab03.AWS
                 {
                     //Id = 12,
                     Content = "Great concept!",
-                    UserId = 12,
+                    UserId = "2",
                     UpdateTime = DateTime.UtcNow,
                     Rating = 8.5
                 }
@@ -529,7 +529,7 @@ namespace Lab03.AWS
                 {
                     //Id = 13,
                     Content = "Dinosaurs are awesome!",
-                    UserId = 13,
+                    UserId = "1",
                     UpdateTime = DateTime.UtcNow,
                     Rating = 8.3
                 },
@@ -537,7 +537,7 @@ namespace Lab03.AWS
                 {
                     //Id = 14,
                     Content = "Classic Spielberg!",
-                    UserId = 14,
+                    UserId = "2",
                     UpdateTime = DateTime.UtcNow,
                     Rating = 8.0
                 }
@@ -560,7 +560,7 @@ namespace Lab03.AWS
                 {
                     //Id = 15,
                     Content = "Hakuna Matata!",
-                    UserId = 15,
+                    UserId = "2",
                     UpdateTime = DateTime.UtcNow,
                     Rating = 8.7
                 },
@@ -568,13 +568,13 @@ namespace Lab03.AWS
                 {
                     //Id = 16,
                     Content = "Heartwarming story!",
-                    UserId = 16,
+                    UserId = "1",
                     UpdateTime = DateTime.UtcNow,
                     Rating = 8.3
                 }
             }
         },
-        // 添加更多电影数据...
+        // add more movies here...
     };
 
             foreach (var movie in movies)

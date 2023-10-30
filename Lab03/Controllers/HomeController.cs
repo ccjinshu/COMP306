@@ -15,6 +15,9 @@ namespace Lab03.Controllers
 
         public IActionResult Index()
         {
+            //get current user's login name
+            var loginName = HttpContext.Session.GetString("loginName");
+            ViewBag.Message = "Welcome " + loginName;
             return View();
         }
 

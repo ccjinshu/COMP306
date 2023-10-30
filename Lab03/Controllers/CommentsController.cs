@@ -6,12 +6,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Lab03.Models;
+using Lab03.AWS;
 
 namespace Lab03.Controllers
 {
     public class CommentsController : Controller
     {
         private readonly Lab3MovieWebContext _context;
+        private readonly DynamoDBHelper _dynamoDbHelper = new DynamoDBHelper();
 
         public CommentsController(Lab3MovieWebContext context)
         {
@@ -45,9 +47,16 @@ namespace Lab03.Controllers
         }
 
         // GET: Comments/Create
-        public IActionResult Create()
+        public IActionResult Create(Movie movie)
         {
-            return View();
+             Comment comment = new Comment();
+            comment.MovieId = movie.Id; 
+            comment.UserId = HttpContext.Session.GetString("loginUserId");
+            comment.UpdateTime = DateTime.Now;
+            comment.Id = Guid.NewGuid().ToString();
+            ViewBag.Movie=movie;
+
+            return View(comment);
         }
 
         // POST: Comments/Create
@@ -55,13 +64,27 @@ namespace Lab03.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Content,UserId,UpdateTime,Rating")] Comment comment)
+        public async Task<IActionResult> Create([Bind("Id,Content,UserId,MovieId,UpdateTime,Rating")] Comment comment)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(comment);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                //_context.Add(comment);
+                //await _context.SaveChangesAsync();
+                //return RedirectToAction(nameof(Index));
+
+                //get movie by movie id
+                var movie = _dynamoDbHelper.GetMovieAsync (comment.MovieId).Result;
+                if (movie == null)
+                {
+                    return NotFound();
+                }
+                //add comment to movie
+                movie.Comments.Add(comment);
+                await _dynamoDbHelper.UpdateMovieAsync(movie);
+                 
+                //retun to movie details page
+                return RedirectToAction("Details", "Movies", new { id = comment.MovieId });
+
             }
             return View(comment);
         }

@@ -11,6 +11,7 @@ using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DocumentModel;
 using Lab03.AWS;
 using Microsoft.Extensions.Azure;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Lab03.Controllers
 {
@@ -46,13 +47,19 @@ namespace Lab03.Controllers
                 return NotFound();
             }
 
+
             return View(movie); 
         }
 
         // GET: Movies/Create
-        public IActionResult Create()
+        public IActionResult Create(string movieId)
         {
-            return View();
+            Comment comment = new Comment();
+            comment.MovieId = movieId;
+            ViewData["movieId"] = movieId;
+            ViewData["comment"] = comment;
+            return View( comment);
+             
         }
 
         // POST: Movies/Create
@@ -98,6 +105,7 @@ namespace Lab03.Controllers
         }
 
         // GET: Movies/Edit/5
+        
         public async Task<IActionResult> Edit(string id)
         {
             if (string.IsNullOrEmpty(id))
@@ -118,6 +126,7 @@ namespace Lab03.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        //[Authorize]
         public async Task<IActionResult> Edit(string id, [Bind("Id,Title,Genre,Director,ReleaseTime,Rating,CoverImage,FileKey,FileUrl")] Movie movie)
         {
             if (string.IsNullOrEmpty(id))
@@ -141,7 +150,7 @@ namespace Lab03.Controllers
                 }
                 catch (Exception ex)
                 {
-                    ModelState.AddModelError("", "更新电影时出错：" + ex.Message);
+                    ModelState.AddModelError("", "error when update movie：" + ex.Message);
                     return View(movie);
                 }
             }
@@ -255,6 +264,186 @@ namespace Lab03.Controllers
  
             return Ok("Init movie data success");
         }
+
+
+        //add comment ,Get
+        [HttpGet]
+        public async Task<IActionResult> AddComment(string id)
+        {
+            try
+            {
+                var loginUserId = HttpContext.Session.GetString("loginUserId");
+
+                if (string.IsNullOrEmpty(loginUserId))
+                {
+                    //return Problem("Please login first.");
+                    return RedirectToAction("Login", "Users"); //  redirect to index page
+                }
+
+                string movieId = id;
+                if (string.IsNullOrEmpty(movieId))
+                {
+                    return NotFound();
+                }
+
+                var movie = await _dynamoDbHelper.GetMovieAsync(movieId);
+                if (movie == null)
+                {
+                    return NotFound();
+                }
+
+                //redirect to create comment page
+                //new RedirectToRouteResult(new RouteValueDictionary()
+                //{
+                //    {"controller","Comments" },
+                //    {"action","Create" },
+                //    {"movieId",movieId }
+                //});
+                //return RedirectToAction("Create", "Comments", movie); //  redirect to index page
+
+                //TempData["movie"] = movie;
+                ViewBag.movie = movie;
+                Comment comment = new Comment();
+                comment.MovieId = movieId;
+                comment.UserId = loginUserId;
+                comment.UpdateTime = DateTime.Now;
+                comment.Id = Guid.NewGuid().ToString();
+                return View(comment);
+            }
+            catch (Exception ex)
+            {
+
+                ModelState.AddModelError("", "error when add comment：" + ex.Message);
+                return Problem("error when add comment：" + ex.Message);
+            }
+        }
+
+
+
+
+
+        //add comment ,Post
+        [HttpPost]
+        public async Task<IActionResult> AddComment( Comment comment )
+        {
+           
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    //get current user's login name
+                    var loginUserId = HttpContext.Session.GetString("loginUserId");
+
+                    if (string.IsNullOrEmpty(loginUserId))
+                    {
+                        //return Problem("Please login first.");
+                        return RedirectToAction("Login", "Users"); //  redirect to index page
+                    }
+
+
+
+                    if (string.IsNullOrEmpty(loginUserId))
+                    {
+                        return Problem("Please login first.");
+                    }
+
+                    //get movie
+                    var movieId = comment.MovieId;
+                    var movie = await _dynamoDbHelper.GetMovieAsync(movieId);
+                    if (movie == null)
+                    {
+                        return Problem("Movie not found.");
+                    }
+
+                    //add comment
+                    comment.UserId = loginUserId;
+                    comment.UpdateTime = DateTime.Now;
+                    comment.Id = Guid.NewGuid().ToString();
+                    movie.Comments.Add(comment);
+                     
+
+                    //update movie
+                    await _dynamoDbHelper.UpdateMovieAsync(movie);
+
+                    return RedirectToAction("Details", "Movies", movie); //  redirect to index page
+                }
+                else
+                {
+                    return Problem("Invalid comment.");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                ModelState.AddModelError("", "error when add comment：" + ex.Message);
+                return Problem("error when add comment：" + ex.Message);
+            }
+        }
+
+
+        public async Task<IActionResult> DeleteComment(string movieId,string commentId)
+        {
+            var id = movieId;
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound();
+            }
+
+            var movie = await _dynamoDbHelper.GetMovieAsync(id);
+            if (movie == null)
+            {
+                return NotFound();
+            }
+
+            //get comment
+            var comment = movie.Comments.FirstOrDefault(c => c.Id == commentId);
+            if (comment == null)
+            {
+                return NotFound();
+            }
+            ViewBag.movie = movie;
+            ViewBag.comment = comment;
+
+            return View(comment);
+        }
+
+        [HttpPost, ActionName("DeleteCommentConfirmed")]
+        public async Task<IActionResult> DeleteCommentConfirmed(string movieId, string commentId)
+        {
+            var id = movieId;
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound();
+            }
+
+            var movie = await _dynamoDbHelper.GetMovieAsync(id);
+            if (movie == null)
+            {
+                return NotFound();
+            }
+
+            //get comment
+            var comment = movie.Comments.FirstOrDefault(c => c.Id == commentId);
+            if (comment == null)
+            {
+                return NotFound();
+            }
+            
+            //delete comment
+            movie.Comments.Remove(comment);
+            //update movie
+            await _dynamoDbHelper.UpdateMovieAsync(movie);
+
+
+            ViewBag.movie = movie;
+            ViewBag.comment = comment;
+            
+            //return to details page
+            return RedirectToAction("Details", "Movies", movie); //  redirect to index page
+
+
+        }
+
 
 
     }

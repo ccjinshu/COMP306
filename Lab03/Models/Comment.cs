@@ -6,10 +6,11 @@ namespace Lab03.Models;
 public partial class Comment
 {
     public string Id { get; set; }
+    public string MovieId { get; set; }
 
     public string Content { get; set; } = null!;
 
-    public int? UserId { get; set; }
+    public string  UserId { get; set; }
 
     public DateTime? UpdateTime { get; set; }
 

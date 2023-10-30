@@ -60,7 +60,63 @@
         </dd>
     </dl>
 </div>
+<br>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Download" asp-route-id="@Model?.Id">Download</a> |
+    <a asp-action="AddComment" asp-route-id="@Model?.Id">Comment Add Rating</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+
+
+<br />
+<h2>Comments</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Content
+            </th>
+            <th>
+                UserId
+            </th>
+            <th>
+                UpdateTime
+            </th>
+            <th>
+                Rating
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Comments)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Content)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UpdateTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Rating)
+                </td>
+                <td>
+                    <a asp-controller="Comments"   asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-controller="Comments" asp-action="Details" asp-route-id="@item.Id">Details</a> |  
+                    <a href="@Url.Action("DeleteComment","Movies" ,new  { movieId=@Model.Id, commentId=  @item.Id })">Delete2</a>
+
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+

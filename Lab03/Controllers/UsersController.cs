@@ -57,8 +57,36 @@ namespace Lab03.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("UserId,Email,Password")] User user)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
+
+                foreach (var modelStateEntry in ModelState.Values)
+                {
+                    foreach (var error in modelStateEntry.Errors)
+                    {
+                        Console.WriteLine($"Model Error: {error.ErrorMessage}");
+                    }
+                }
+
+
+                var errors = ModelState.Values.SelectMany(v => v.Errors);
+                String msg = errors.Aggregate("", (current, error) => current + error.ErrorMessage);
+                ViewData["ErrorMessage"] = "Please correct the validation errors." + msg;
+                return View(user);
+            }
+
+            if (ModelState.IsValid)
+            { 
+
+                //check if user already exists
+                var existingUser = _context.Users.FirstOrDefault(u => u.Email == user.Email);
+                if (existingUser != null)
+                {
+                    var msg= " "+ user.Email+"   already  registered. Please login."; 
+                    ViewData["ErrorMessage"] =   msg;
+                    return View(user);
+                } 
+
                 _context.Add(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -158,5 +186,61 @@ namespace Lab03.Controllers
         {
           return (_context.Users?.Any(e => e.UserId == id)).GetValueOrDefault();
         }
+
+
+
+        //login user
+
+        // GET: Users/Create
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login([Bind("Email,Password")] User user)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    //check if user already exists
+                    User existingUser = _context.Users.FirstOrDefault(u => u.Email == user.Email);
+                    if (existingUser == null)
+                    {
+                        var msg= " "+ user.Email+"   not registered. Please register.";
+                        ViewData["ErrorMessage"] =   msg;
+                        return View(user);
+                    } 
+
+                    //check password
+                    if (existingUser.Password != user.Password)
+                    {
+                        var msg= " "+ user.Email+"   password is incorrect.";
+                        ViewData["ErrorMessage"] =   msg;
+                        return View(user);
+                    }
+
+
+                    //login success
+
+                    //set session
+                    HttpContext.Session.SetString("loginName", existingUser.Email);
+                    HttpContext.Session.SetString("loginUserId", existingUser.UserId+"");
+                    // 将用户信息传递到视图中 
+                    ViewBag.loginName = existingUser.Email;
+
+                    return RedirectToAction("Index", "Movies"); //  redirect to index page
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            return View(user);
+        }
+
+
     }
 }
