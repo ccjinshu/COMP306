@@ -4,6 +4,7 @@ namespace Lab03.Models
 {
     public enum MovieGenre
     {
+        None = -1, // 无
         Unknown, // 未知
         Action, // 动作
         Adventure, // 冒险

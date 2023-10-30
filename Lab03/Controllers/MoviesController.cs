@@ -190,25 +190,17 @@ namespace Lab03.Controllers
 
         //
 
-        // 处理添加电影的 POST 请求
+        //add movie
         [HttpPost]
         public async Task<IActionResult> AddMovie(Movie movie)
         {
             try
             {
                 if (ModelState.IsValid)
-                {
+                { 
+                   await _dynamoDbHelper.AddMovieAsync(movie); 
 
-
-                    // 创建 Movie 对象并设置 Id
-
-
-                    // 将电影信息存储到 DynamoDB 表中
-                   await _dynamoDbHelper.AddMovieAsync(movie);
-
-
-
-                    return RedirectToAction("Index", "Movies"); // 添加成功后重定向到电影列表页面
+                    return RedirectToAction("Index", "Movies"); //  redirect to index page
                 }
                 else
                 {
@@ -217,34 +209,43 @@ namespace Lab03.Controllers
             }
             catch (Exception ex)
             {
-                // 处理异常情况
-                ModelState.AddModelError("", "添加电影时出错：" + ex.Message);
+                
+                ModelState.AddModelError("", "error when add movie：" + ex.Message);
                 return View(movie);
             }
         }
 
-        // 查询全部电影列表
+        //  get all movies
         [HttpGet]
         public async Task<IActionResult> Index()
-        {
-          
+        { 
 
             var allMovies = await _dynamoDbHelper.GetAllMoviesAsync(); 
             return View(allMovies);
         }
+
+        //get movies by genre and rating
         [HttpPost]
         public async Task<IActionResult> Index(MovieGenre selectedGenre, double? minRating, double? maxRating)
         {
 
-            var movies    = await _dynamoDbHelper.QueryMoviesByGenreAsync(selectedGenre);  // 获取所有电影数据
+            var movies    = await _dynamoDbHelper.QueryMoviesByFiltersAsync(selectedGenre, minRating, maxRating);
 
-             
+
+            //return minRating to view
+            ViewData["minRating"] = minRating;
+            ViewData["maxRating"] = maxRating;
+            ViewData["selectedGenre"] = selectedGenre;
+
+            
+
+
 
             return View(movies);
         }
 
 
-        // 查询全部电影列表
+        //  generate demo data
         [HttpGet]
         public async Task<IActionResult> Init()
         {

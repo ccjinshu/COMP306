@@ -1,5 +1,5 @@
 ﻿@model IEnumerable<Lab03.Models.Movie>
-
+ 
 @{
     ViewData["Title"] = "Movie List";
 }
@@ -9,25 +9,26 @@
     <a class="btn btn-primary" asp-action="Create">Create New Movie</a>
 </p>
  
-
+  
 <form method="post" asp-action="Index" >
     <table  > 
         <tr  >
             <td style="padding-right:2em;">
                     <label for="selectedGenre" >Filter by Genre:</label>
-                <select   id="selectedGenre" name="selectedGenre" asp-items="Html.GetEnumSelectList<Lab03.Models.MovieGenre>()">
-                        <option value="">Select Genre</option>
+                <select  asp-for="@ViewData["selectedGenre"]"
+                    id="selectedGenre" name="selectedGenre" asp-items="Html.GetEnumSelectList<Lab03.Models.MovieGenre>()">
+                        <option value="-1">Select Genre</option>
                     </select> 
             </td>
             <td style="padding-right:2em;">
                 <label for="minRating" >Min Rating:</label> 
-                    <input type="number" id="minRating" name="minRating" >
+                <input type="number" id="minRating" name="minRating" value="@ViewData["minRating"]">
                
             </td>
             <td style="padding-right:2em;">
 
                 <label for="maxRating" >Max Rating:</label> 
-                <input type="number" id="maxRating" name="maxRating" >
+                <input type="number" id="maxRating" name="maxRating" value="@ViewData["maxRating"]">
                 
             </td>
             <td>

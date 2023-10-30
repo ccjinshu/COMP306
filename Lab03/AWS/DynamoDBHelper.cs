@@ -205,6 +205,46 @@ namespace Lab03.AWS
            
         }
 
+        //find movies by filters  
+        public async Task<List<Movie>> QueryMoviesByFiltersAsync(MovieGenre genre, double? minRating, double? maxRating)
+        {
+            //IndexName : GenreIndex or RatingIndex
+
+            string useIndex = null;
+
+            List<ScanCondition> filters = new List<ScanCondition>(); 
+            if (genre != MovieGenre.None)
+            {
+                filters.Add(new ScanCondition("Genre", ScanOperator.Equal, genre));
+                useIndex = "GenreIndex";
+            }
+
+
+            if (minRating != null) //compare with min rating
+            {
+                filters.Add(new ScanCondition("Rating", ScanOperator.GreaterThanOrEqual, minRating));
+                useIndex = useIndex == null ? "RatingIndex" : useIndex;
+            }
+
+            if (maxRating != null) //compare with max rating
+            {
+                filters.Add(new ScanCondition("Rating", ScanOperator.LessThanOrEqual, maxRating));
+                useIndex = useIndex == null ? "RatingIndex" : useIndex;
+
+            }
+
+            var config = new DynamoDBOperationConfig
+            {
+                IndexName = useIndex, // 使用 GenreIndex 二级索引
+            };
+
+            var  movies = await _dynamoDBContext.ScanAsync<Movie> (filters).GetRemainingAsync();
+             
+
+            return movies;
+        }
+
+
         // 查询电影列表
         public async Task<List<Movie>> QueryMoviesByGenreAsync(MovieGenre genre)
         {
