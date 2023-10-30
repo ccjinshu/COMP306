@@ -52,13 +52,10 @@ namespace Lab03.Controllers
         }
 
         // GET: Movies/Create
-        public IActionResult Create(string movieId)
+        public IActionResult Create()
         {
-            Comment comment = new Comment();
-            comment.MovieId = movieId;
-            ViewData["movieId"] = movieId;
-            ViewData["comment"] = comment;
-            return View(comment);
+            
+            return View();
 
         }
 
@@ -69,6 +66,7 @@ namespace Lab03.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Title,Genre,Director,ReleaseTime,Rating,CoverImage,FileKey,FileUrl")] Movie movie)
         {
+            ModelState.Remove("UploaderId");
             ModelState.Remove("Comments");
 
             if (!ModelState.IsValid)
@@ -94,6 +92,8 @@ namespace Lab03.Controllers
             {
                 //_context.Add(movie);
                 //await _context.SaveChangesAsync();
+                movie.UploaderId = base.LoginUserId;
+                movie.UpldateTime = DateTime.Now;
 
                 var x = await _dynamoDbHelper.AddMovieAsync(movie);
                 //print log
@@ -139,6 +139,9 @@ namespace Lab03.Controllers
         //[Authorize]
         public async Task<IActionResult> Edit(string id, [Bind("Id,Title,Genre,Director,ReleaseTime,Rating,CoverImage,FileKey,FileUrl")] Movie movie)
         {
+            ModelState.Remove("UploaderId");
+            ModelState.Remove("Comments");
+
             if (string.IsNullOrEmpty(id))
             {
                 return NotFound();
@@ -165,10 +168,13 @@ namespace Lab03.Controllers
 
 
 
+
             if (ModelState.IsValid)
             {
                 try
                 {
+                    movie.UploaderId = base.LoginUserId;
+                    movie.UpldateTime = DateTime.Now;
                     var result = await _dynamoDbHelper.UpdateMovieAsync(movie);
                     Console.WriteLine("Update movie result: " + result);
 
@@ -181,7 +187,12 @@ namespace Lab03.Controllers
                 }
             }
 
-            return View(movie);
+            //return to movie details page
+            return RedirectToAction("Details", "Movies", movie); //  redirect to index page
+
+           
+
+            //return View(movie);
         }
 
         // GET: Movies/Delete/5

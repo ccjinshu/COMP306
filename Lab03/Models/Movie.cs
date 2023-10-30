@@ -40,6 +40,9 @@ public partial class Movie
     [DynamoDBProperty]
     public string UploaderId { get; set; }
 
+    [DynamoDBProperty]
+    public DateTime UpldateTime { get; set; }
+
 
     [DynamoDBProperty]
     [BindNever] 
