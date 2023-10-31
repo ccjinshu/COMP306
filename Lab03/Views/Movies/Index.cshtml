@@ -56,30 +56,32 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td><img src="@item.CoverImage" alt="@item.Title" style="max-width: 100px;" /></td>
+            <tr >
+                <td style="width: 150px; ">
+                    <img src="@item.CoverImage" alt="@item.Title" style="max-height: 150px;max-width: 150px; " />
+                </td>
                 <td>
                     <strong>Title:</strong> @item.Title<br />
                     <strong>Genre:</strong> @Html.DisplayFor(model => item.Genre)                 <br />
                     <strong>Director:</strong> @item.Director<br />
-                    <strong>Release Date:</strong> @String.Format("{0:yyyy-MM-dd}", item.ReleaseTime)<br />
+                    <strong>Release Date:</strong> @String.Format("{0:yyyy-MM-dd}", item.ReleaseTime)<br /> 
                 </td>
                 <td>
                     <strong>Rating:</strong> @item.Rating<br />
                 </td>
-                <td>
-                    <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                   <td>
+                       <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id">Details</a>
 
 
-                    @{
-                        if (ViewBag.loginUserId == item.UploaderId )
-{
-                            <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                            <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                        }
+                       @{
+                           if (ViewBag.loginUserId == item.UploaderId )
+   {
+                               <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                               <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                           }
 
-                    }
-                </td>
+                       }
+                   </td>
             </tr>
         }
     </tbody>
