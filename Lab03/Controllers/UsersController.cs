@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System.Security.Cryptography;
 namespace Lab03.Controllers
 {
-    public class UsersController : Controller
+    public class UsersController : AuthController
     {
         private readonly Lab3MovieWebContext _context;
 
@@ -109,9 +109,68 @@ namespace Lab03.Controllers
                 user.PasswordHash = hashPassword(user.Password);
                 _context.Add(user);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                //return RedirectToAction(nameof(Index));
+                //return to home page
+                return RedirectToAction("Index", "Home");
             }
             return View(user);
+        }
+        // GET: Users/Profile
+        public async Task<IActionResult> Profile()
+        { 
+            //check if login
+            if (HttpContext.Session.GetString("loginUserId") == null)
+            {
+                return RedirectToAction("Login", "Users");
+            }
+            //get current user's login id
+            var id = int.Parse(HttpContext.Session.GetString("loginUserId"));
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            ViewBag.user = user;
+
+            return View(  user);
+        }
+
+        // GET: Users/Profile
+        [HttpPost]
+        public async Task<IActionResult> Profile([Bind("UserId,Email,Password,ConfirmPassword")] User user)
+        {
+            //check if login
+            if (HttpContext.Session.GetString("loginUserId") == null)
+            {
+                return RedirectToAction("Login", "Users");
+            }
+
+            //remove passwordhash from ModelState
+            ModelState.Remove("PasswordHash");
+
+
+            if (!ModelState.IsValid)
+            {
+                return base.ShowModelStateValidMessage();
+            }
+
+            //get current user's login id
+            var id = int.Parse(HttpContext.Session.GetString("loginUserId"));
+            var user1 = await _context.Users.FindAsync(id);
+            if (user1 == null)
+            {
+                return NotFound();
+            } 
+
+            user1.PasswordHash = hashPassword(user.Password); 
+            _context.Update(user1);
+            await _context.SaveChangesAsync(); 
+
+            //updaed success ,redirect to login page
+            return RedirectToAction("Login", "Users");
+
+
         }
 
         // GET: Users/Edit/5

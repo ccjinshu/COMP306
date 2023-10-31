@@ -1,11 +1,11 @@
 
 {
     "region" : "ca-central-1",
-    "configuration" : "Debug",
+    "configuration" : "Release",
     "framework"     : "net6.0",
-    "self-contained" : true,
-    "application"    : "sjin-movie-v2",
-    "environment"    : "sjin-movie-v2-dev",
+    "self-contained" : false,
+    "application"    : "sjin-movie-v3",
+    "environment"    : "sjin-movie-v3-dev",
     "enable-xray"    : false,
     "enhanced-health-type" : "basic",
     "additional-options"   : "",

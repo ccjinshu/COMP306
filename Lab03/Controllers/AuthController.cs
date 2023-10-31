@@ -62,6 +62,12 @@ namespace Lab03.Controllers
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {
+            if (context.HttpContext.Request.Path.ToString().StartsWith("/Users/Login")
+                || context.HttpContext.Request.Path.ToString().StartsWith("/Users/Create")
+                )
+            {
+                return;
+            }
 
             //get current user's login name
             loginName = HttpContext.Session.GetString("loginName");
@@ -70,15 +76,8 @@ namespace Lab03.Controllers
 
             //if user is not logged in, redirect to login page
             if (loginName == null)
-            {
-                //if route is start with /Users, do not redirect to login page
-                if (context.HttpContext.Request.Path.ToString().StartsWith("/Movies"))
-                {
-                    context.Result = new RedirectResult("/Users/Login");
-                }
-
-                
-
+            { 
+                context.Result = new RedirectResult("/Users/Login"); 
             }
              
             //save login name and id to viewbag
@@ -107,6 +106,13 @@ namespace Lab03.Controllers
         {
             ViewBag.Message = msg;
             return View( "../Auth/Msg");
+        }
+
+        public IActionResult ShowModelStateValidMessage( )
+        {
+            var msg= this.GetModelStateValidMessage();
+            ViewBag.Message =  msg;
+            return View("../Auth/Msg");
         }
 
     }
