@@ -749,13 +749,7 @@ namespace Lab03.Controllers
                 return NotFound();
             }
 
-            //check movie uploader is current login user
-            if (movie.UploaderId != base.LoginUserId)
-            {
-                var msg = "It is not your movie. You can not download it.";
-                return base.ShowError(msg);
-
-            }
+ 
 
             //check file is exist
             if (string.IsNullOrEmpty(movie.FileKey))

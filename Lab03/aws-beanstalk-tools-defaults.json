@@ -1,0 +1,22 @@
+
+{
+    "region" : "ca-central-1",
+    "configuration" : "Debug",
+    "framework"     : "net6.0",
+    "self-contained" : true,
+    "application"    : "sjin-movie-v2",
+    "environment"    : "sjin-movie-v2-dev",
+    "enable-xray"    : false,
+    "enhanced-health-type" : "basic",
+    "additional-options"   : "",
+    "solution-stack"       : "64bit Windows Server Core 2019 v2.12.0 running IIS 10.0",
+    "environment-type"     : "SingleInstance",
+    "cname"                : "sjin-movie-v3-dev",
+    "instance-type"        : "t2.micro",
+    "key-pair"             : "comp306-lab3",
+    "instance-profile"     : "aws-elasticbeanstalk-ec2-role",
+    "service-role"         : "aws-elasticbeanstalk-service-role",
+    "proxy-server"         : "nginx",
+    "app-path"             : "/",
+    "iis-website"          : "Default Web Site"
+}
