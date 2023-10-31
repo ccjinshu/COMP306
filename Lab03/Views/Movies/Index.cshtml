@@ -69,8 +69,16 @@
                 </td>
                 <td>
                     <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id">Details</a>
-                    <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+
+
+                    @{
+                        if (ViewBag.loginUserId == item.UploaderId )
+{
+                            <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                            <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        }
+
+                    }
                 </td>
             </tr>
         }

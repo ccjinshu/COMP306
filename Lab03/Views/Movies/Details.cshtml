@@ -116,10 +116,18 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Rating)
                 </td>
-                <td>
-                    <a href="@Url.Action("EditComment","Movies" ,new  { movieId=@Model.Id, commentId=  @item.Id })">Edit</a>
-                    <a href="@Url.Action("DeleteComment","Movies" ,new  { movieId=@Model.Id, commentId=  @item.Id })">Delete</a>
+                <td> 
+                    @{
+                        if (ViewBag.loginUserId == item.UserId)
+                        {
+                            <a href="@Url.Action("EditComment","Movies" ,new  { movieId=@Model.Id, commentId=  @item.Id })">Edit</a>
+                            <a href="@Url.Action("DeleteComment","Movies" ,new  { movieId=@Model.Id, commentId=  @item.Id })">Delete</a>
 
+                        }
+
+
+                    }
+                 
 
                 </td>
             </tr>

@@ -827,8 +827,10 @@ namespace Lab03.Controllers
         {
             if (movie.Comments != null || movie.Comments.Count >= 0)
             { 
-                //update movie rating
-                movie.Rating = movie.Comments.Average(c => c.Rating);
+                //update movie rating , average rating of all comments , #.# format
+                var rating = movie.Comments.Average(c => c.Rating);
+                movie.Rating = Math.Round(rating, 1);
+                //movie.Rating = movie.Comments.Average(c => c.Rating);
             }
 
         }
