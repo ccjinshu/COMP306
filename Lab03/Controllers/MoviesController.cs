@@ -180,39 +180,8 @@ namespace Lab03.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost] 
         //[Authorize]
-        public async Task<IActionResult> Edit(string id,
-        Movie movie, IFormFile movieFile,IFormFile  coverFile)
-        {
-             
-
-           
-
-
-            //if (movie.MovieFile != null && movie.MovieFile.Length > 0)
-            //{
-                
-            //    ModelState.Remove("FileKey");
-            //    ModelState.Remove("FileUrl");
-
-            //}
-            //else
-            //{
-            //    ModelState.Remove("MovieFile");
-            //}
-
-            //if (movie.CoverFile != null && movie.CoverFile.Length > 0)
-            //{
-            //       ModelState.Remove("CoverImage");
-            //}
-            //else
-            //{
-            //    ModelState.Remove("CoverFile");
-            //}
-
-
-               
-          
-
+        public async Task<IActionResult> Edit(string id, Movie movie )
+        {   
 
             if (string.IsNullOrEmpty(id))
             {
@@ -552,9 +521,10 @@ namespace Lab03.Controllers
                     comment.Id = Guid.NewGuid().ToString();
                     movie.Comments.Add(comment);
 
-
-                    //update movie
-                    await _dynamoDbHelper.UpdateMovieAsync(movie);
+                    this.UpdateMovieRating(movie);
+                     //update movie
+                     await _dynamoDbHelper.UpdateMovieAsync(movie);
+                   
 
                     return RedirectToAction("Details", "Movies", movie); //  redirect to index page
                 }
@@ -632,9 +602,13 @@ namespace Lab03.Controllers
 
             //delete comment
             movie.Comments.Remove(comment);
+
+            this.UpdateMovieRating(movie);
+
+
             //update movie
             await _dynamoDbHelper.UpdateMovieAsync(movie);
-
+            
 
             ViewBag.movie = movie;
             ViewBag.comment = comment;
@@ -728,9 +702,12 @@ namespace Lab03.Controllers
             comment1.Rating = comment.Rating;
             comment1.UserId = loginUserId;
 
+            this.UpdateMovieRating(movie);
+
+
             //update movie
             await _dynamoDbHelper.UpdateMovieAsync(movie);
-
+            
             ViewBag.movie = movie;
             ViewBag.comment = comment1;
             //return to details page
@@ -828,6 +805,21 @@ namespace Lab03.Controllers
             return RedirectToAction("Details", "Movies", movie); //  redirect to index page 
         }
 
+
+
+
+
+        //when comments update, update movie rating
+
+        public void UpdateMovieRating(Movie movie)
+        {
+            if (movie.Comments != null || movie.Comments.Count >= 0)
+            { 
+                //update movie rating
+                movie.Rating = movie.Comments.Average(c => c.Rating);
+            }
+
+        }
 
     }
 }
