@@ -167,7 +167,7 @@ namespace Lab03.Controllers
             if (movie.UploaderId != null && movie.UploaderId != base.LoginUserId)
             {
                 var msg = "It is not your movie. You can not edit it.";
-                //return base.ShowError(msg);
+                return base.ShowError(msg);
 
             }
 
@@ -203,7 +203,7 @@ namespace Lab03.Controllers
             if (movie1.UploaderId !=null && movie1.UploaderId != base.LoginUserId)
             {
                 var msg = "It is not your movie. You can not edit it.";
-                //return base.ShowError(msg);
+                return base.ShowError(msg);
 
             }
 
@@ -467,6 +467,7 @@ namespace Lab03.Controllers
                 comment.UserId = loginUserId;
                 comment.UpdateTime = DateTime.Now;
                 comment.Id = Guid.NewGuid().ToString();
+                comment.Rating = 5;
                 ViewBag.comment = comment;
                 return View(comment);
             }
@@ -574,6 +575,13 @@ namespace Lab03.Controllers
 
             }
 
+            var updateTime = comment.UpdateTime;
+            if (updateTime != null && ((DateTime)updateTime).AddHours(24) < DateTime.Now)
+            {
+                var msg = "You can only update your comment within 24 hours after you update it.";
+                return base.ShowError(msg);
+            }
+
 
             return View(comment);
         }
@@ -654,6 +662,16 @@ namespace Lab03.Controllers
             }
 
            
+            //only can update 24h after update
+
+            var updateTime = comment.UpdateTime;
+            if (updateTime != null && ((DateTime)updateTime).AddHours(24) < DateTime.Now)
+            {
+                var msg = "You can only update your comment within 24 hours after you update it.";
+                return base.ShowError(msg);
+            } 
+
+
 
             return View(comment);
         }
