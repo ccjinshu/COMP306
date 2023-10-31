@@ -6,7 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Lab03.Models;
-
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using System.Security.Cryptography;
 namespace Lab03.Controllers
 {
     public class UsersController : Controller
@@ -55,8 +56,26 @@ namespace Lab03.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("UserId,Email,Password")] User user)
+        public async Task<IActionResult> Create([Bind("UserId,Email,Password,ConfirmPassword")] User user)
         {
+
+            var password = user.Password;
+            var confirmPassword = user.ConfirmPassword;
+
+            //remove ConfirmPassword from ModelState
+
+            //ModelState.Remove("ConfirmPassword");
+            ModelState.Remove("PasswordHash");
+
+            //check if password and confirmPassword are the same
+            //if (password != confirmPassword)
+            //{
+            //    ViewData["ErrorMessage"] = "Password and Confirm Password do not match.";
+            //    return View(user);
+            //}
+
+
+
             if (!ModelState.IsValid)
             {
 
@@ -85,8 +104,9 @@ namespace Lab03.Controllers
                     var msg= " "+ user.Email+"   already  registered. Please login."; 
                     ViewData["ErrorMessage"] =   msg;
                     return View(user);
-                } 
-
+                }  
+               
+                user.PasswordHash = hashPassword(user.Password);
                 _context.Add(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -115,8 +135,12 @@ namespace Lab03.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("UserId,Email,Password")] User user)
+        public async Task<IActionResult> Edit(int id, [Bind("UserId,Email,Password,ConfirmPassword")] User user)
         {
+            //remove passwordhash from ModelState
+            ModelState.Remove("PasswordHash");
+
+
             if (id != user.UserId)
             {
                 return NotFound();
@@ -126,6 +150,10 @@ namespace Lab03.Controllers
             {
                 try
                 {
+
+
+                    user.PasswordHash = hashPassword(user.Password);
+
                     _context.Update(user);
                     await _context.SaveChangesAsync();
                 }
@@ -208,6 +236,29 @@ namespace Lab03.Controllers
         [HttpPost]
         public async Task<IActionResult> Login([Bind("Email,Password")] User user)
         {
+            //remove passwordhash from ModelState
+            ModelState.Remove("PasswordHash");
+            ModelState.Remove("ConfirmPassword");
+            if (!ModelState.IsValid)
+            {
+
+                foreach (var modelStateEntry in ModelState.Values)
+                {
+                    foreach (var error in modelStateEntry.Errors)
+                    {
+                        Console.WriteLine($"Model Error: {error.ErrorMessage}");
+                    }
+                }
+
+
+                var errors = ModelState.Values.SelectMany(v => v.Errors);
+                String msg = errors.Aggregate("", (current, error) => current + error.ErrorMessage);
+                ViewData["ErrorMessage"] = "Please correct the validation errors." + msg;
+                return View(user);
+            }
+
+
+
             try
             {
                 if (ModelState.IsValid)
@@ -219,10 +270,12 @@ namespace Lab03.Controllers
                         var msg= " "+ user.Email+"   not registered. Please register.";
                         ViewData["ErrorMessage"] =   msg;
                         return View(user);
-                    } 
+                    }
 
                     //check password
-                    if (existingUser.Password != user.Password)
+                    var hashstr1 = this.hashPassword(user.Password);
+                    var hashstr2 = this.hashPassword(user.Password);
+                    if (existingUser.PasswordHash != hashPassword(user.Password))
                     {
                         var msg= " "+ user.Email+"   password is incorrect.";
                         ViewData["ErrorMessage"] =   msg;
@@ -248,6 +301,30 @@ namespace Lab03.Controllers
             }
             return View(user);
         }
+
+
+
+        string   hashPassword(string password)
+        {
+            // Generate a 128-bit salt using a sequence of
+            // cryptographically strong random bytes.
+            //byte[] salt = RandomNumberGenerator.GetBytes(128 / 8); // divide by 8 to convert bits to bytes
+            //Console.WriteLine($"Salt: {Convert.ToBase64String(salt)}");
+             
+
+            //define a salt for testing
+            byte[] salt = Convert.FromBase64String("XrY7uAFWMUfzaD6xQFNgaQ==");
+            // derive a 256-bit subkey (use HMACSHA256 with 100,000 iterations)
+            string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                password: password!,
+                salt: salt,
+                prf: KeyDerivationPrf.HMACSHA256,
+                iterationCount: 100000,
+                numBytesRequested: 256 / 8));
+
+             return hashed;
+        }
+
 
 
     }

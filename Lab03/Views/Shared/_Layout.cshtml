@@ -22,7 +22,7 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
+                        @*    <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Movies" asp-action="Index">Movie</a>
                         </li>
                         <li class="nav-item">
@@ -37,12 +37,51 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Logout">Logout</a>
                         </li>
+                          <li class="nav-item">
+                              <a class="nav-link text-dark" asp-area="" asp-controller="Movies" asp-action="Init">Init dynamoDb table</a>
+                          </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Movies" asp-action="Init">Init dynamoDb table</a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+                          *@
+                      
+
+                        @{
+                            if (ViewBag.LoginName != null && ViewBag.LoginName != "")
+                            { //logined
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" href="@Url.Action("Index", "Movies")">Movies</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" href="@Url.Action("Edit","Users",new {Id= @ViewBag.LoginUserId})">Profile</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" href="@Url.Action("Logout","Users")">Logout</a>
+                                </li>
+                                <li class="nav-item">
+                                    <label class="nav-link text-dark"  style="padding-left:10em;">  
+                                    Welcome  <span style="color:blue" >   @ViewBag.LoginName </span>  </label>
+                                    
+                                </li>
+                                 
+
+                            }
+                            else
+                            { //not logined
+                                 
+
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" href="@Url.Action("Create", "Users")">Register</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" href="@Url.Action("Login", "Users")">Login</a>
+                                </li> 
+                            }
+                        }
+
+
+                       
+
                     </ul>
                 </div>
             </div>
