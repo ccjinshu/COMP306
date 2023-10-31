@@ -19,6 +19,7 @@ namespace Lab03.Controllers
     {
         //private readonly Lab3MovieWebContext _context;
         DynamoDBHelper _dynamoDbHelper = new DynamoDBHelper();
+        S3Helper _s3Helper = new S3Helper();
 
         public MoviesController(Lab3MovieWebContext context)
         {
@@ -64,10 +65,16 @@ namespace Lab03.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Genre,Director,ReleaseTime,Rating,CoverImage,FileKey,FileUrl")] Movie movie)
+        public async Task<IActionResult> Create([Bind("Id,Title,Genre,Director,ReleaseTime,Rating,CoverFile,MovieFile")] Movie movie)
         {
             ModelState.Remove("UploaderId");
             ModelState.Remove("Comments");
+
+            ModelState.Remove("CoverImage");
+            ModelState.Remove("CoverFile");
+            ModelState.Remove("MovieFile");
+            ModelState.Remove("FileKey");
+            ModelState.Remove("FileUrl");
 
             if (!ModelState.IsValid)
             {
@@ -94,6 +101,43 @@ namespace Lab03.Controllers
                 //await _context.SaveChangesAsync();
                 movie.UploaderId = base.LoginUserId;
                 movie.UpldateTime = DateTime.Now;
+
+ 
+
+                //save movie file to s3 bucket
+
+                if (movie.MovieFile != null && movie.MovieFile.Length > 0)
+                {
+                    //save by s3helper
+                    var filename = movie.Id + "-mov-" + movie.MovieFile.FileName;
+                    var fileKey = await _s3Helper.UploadFileAsync(filename, movie.MovieFile.OpenReadStream());
+                    if (string.IsNullOrEmpty(fileKey))
+                    {
+                        return NotFound();
+                    }
+                    movie.FileKey = fileKey;
+                    movie.FileUrl = _s3Helper.GetFileUrl(fileKey);
+                }
+
+                //save cover file to s3 bucket
+                if (movie.CoverFile != null && movie.CoverFile.Length > 0)
+                {
+                    var filename = movie.Id + "-cover-" + movie.CoverFile.FileName;
+                    //save by s3helper
+                    var fileKey = await _s3Helper.UploadFileAsync(filename, movie.CoverFile.OpenReadStream());
+                    if (string.IsNullOrEmpty(fileKey))
+                    {
+                        return NotFound();
+                    }
+                    movie.CoverImage = _s3Helper.GetFileUrl(fileKey);
+                }
+
+
+
+                movie.MovieFile = null;
+                movie.CoverFile = null;
+
+
 
                 var x = await _dynamoDbHelper.AddMovieAsync(movie);
                 //print log
@@ -123,7 +167,7 @@ namespace Lab03.Controllers
             if (movie.UploaderId != null && movie.UploaderId != base.LoginUserId)
             {
                 var msg = "It is not your movie. You can not edit it.";
-                return base.ShowError(msg);
+                //return base.ShowError(msg);
 
             }
 
@@ -134,13 +178,41 @@ namespace Lab03.Controllers
         // POST: Movies/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost] 
         //[Authorize]
-        public async Task<IActionResult> Edit(string id, [Bind("Id,Title,Genre,Director,ReleaseTime,Rating,CoverImage,FileKey,FileUrl")] Movie movie)
+        public async Task<IActionResult> Edit(string id,
+        Movie movie, IFormFile movieFile,IFormFile  coverFile)
         {
-            ModelState.Remove("UploaderId");
-            ModelState.Remove("Comments");
+             
+
+           
+
+
+            //if (movie.MovieFile != null && movie.MovieFile.Length > 0)
+            //{
+                
+            //    ModelState.Remove("FileKey");
+            //    ModelState.Remove("FileUrl");
+
+            //}
+            //else
+            //{
+            //    ModelState.Remove("MovieFile");
+            //}
+
+            //if (movie.CoverFile != null && movie.CoverFile.Length > 0)
+            //{
+            //       ModelState.Remove("CoverImage");
+            //}
+            //else
+            //{
+            //    ModelState.Remove("CoverFile");
+            //}
+
+
+               
+          
+
 
             if (string.IsNullOrEmpty(id))
             {
@@ -162,30 +234,63 @@ namespace Lab03.Controllers
             if (movie1.UploaderId !=null && movie1.UploaderId != base.LoginUserId)
             {
                 var msg = "It is not your movie. You can not edit it.";
-                return base.ShowError(msg);
+                //return base.ShowError(msg);
 
             }
 
-
-
-
-            if (ModelState.IsValid)
+        
+            try
             {
-                try
-                {
-                    movie.UploaderId = base.LoginUserId;
-                    movie.UpldateTime = DateTime.Now;
-                    var result = await _dynamoDbHelper.UpdateMovieAsync(movie);
-                    Console.WriteLine("Update movie result: " + result);
+                movie1.UploaderId = base.LoginUserId;
+                movie1.UpldateTime = DateTime.Now; 
+                movie1.Title = movie.Title;
+                movie1.Genre = movie.Genre;
+                movie1.Director = movie.Director;
+                movie1.ReleaseTime = movie.ReleaseTime;
+                movie1.Rating = movie.Rating;
 
-                    return RedirectToAction(nameof(Index));
-                }
-                catch (Exception ex)
+
+
+                //save movie file to s3 bucket
+
+                if (movie.MovieFile != null && movie.MovieFile.Length > 0)
                 {
-                    ModelState.AddModelError("", "error when update movie：" + ex.Message);
-                    return View(movie);
+                    //save by s3helper
+                    var filename = movie.Id+"-mov-"+ movie.MovieFile.FileName;
+                    var fileKey = await _s3Helper.UploadFileAsync(filename, movie.MovieFile.OpenReadStream());
+                    if (string.IsNullOrEmpty(fileKey))
+                    {
+                        return NotFound();
+                    }
+                    movie1.FileKey = fileKey;
+                    movie1.FileUrl = _s3Helper.GetFileUrl(fileKey); 
                 }
+
+                //save cover file to s3 bucket
+                if (movie.CoverFile != null && movie.CoverFile.Length > 0)
+                {
+                    var filename = movie.Id + "-cover-" + movie.CoverFile.FileName;
+                    //save by s3helper
+                    var fileKey = await _s3Helper.UploadFileAsync(filename, movie.CoverFile.OpenReadStream());
+                    if (string.IsNullOrEmpty(fileKey))
+                    {
+                        return NotFound();
+                    }
+                    movie1.CoverImage = _s3Helper.GetFileUrl(fileKey); 
+                }
+                      
+
+                var result = await _dynamoDbHelper.UpdateMovieAsync(movie1);
+                Console.WriteLine("Update movie result: " + result);
+
+                return RedirectToAction(nameof(Index));
             }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "error when update movie：" + ex.Message);
+                return View(movie);
+            }
+             
 
             //return to movie details page
             return RedirectToAction("Details", "Movies", movie); //  redirect to index page
@@ -242,6 +347,30 @@ namespace Lab03.Controllers
                 return base.ShowError(msg);
 
             }
+
+
+            try
+            {
+
+                //delete file from s3
+                if (!string.IsNullOrEmpty(movie1.FileKey))
+                {
+                    await _s3Helper.DeleteFileAsync(movie1.FileKey);
+                }
+
+                //delete cover file from s3
+                if (!string.IsNullOrEmpty(movie1.CoverImage))
+                {
+                    await _s3Helper.DeleteFileByUrlAsync(movie1.CoverImage);
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                
+            }
+
 
 
             await _dynamoDbHelper.DeleteMovieAsync(id);
@@ -608,6 +737,97 @@ namespace Lab03.Controllers
             return RedirectToAction("Details", "Movies", movie); //  redirect to index page 
              
         }
+
+
+        //download file from s3
+        [HttpGet]
+        public async Task<IActionResult> Download(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound();
+            }
+
+            var movie = await _dynamoDbHelper.GetMovieAsync(id);
+            if (movie == null)
+            {
+                return NotFound();
+            }
+
+            //check movie uploader is current login user
+            if (movie.UploaderId != base.LoginUserId)
+            {
+                var msg = "It is not your movie. You can not download it.";
+                return base.ShowError(msg);
+
+            }
+
+            //check file is exist
+            if (string.IsNullOrEmpty(movie.FileKey))
+            {
+                return NotFound();
+            }
+
+            //download file
+            var file = await _s3Helper.GetFileStreamAsync(movie.FileKey);
+            if (file == null)
+            {
+                return NotFound();
+            }
+
+            return File(file, "application/octet-stream", movie.FileKey);
+        }
+
+
+
+
+        //update file to s3 ,return file url and file key
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateFile(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound();
+            }
+
+            var movie = await _dynamoDbHelper.GetMovieAsync(id);
+            if (movie == null)
+            {
+                return NotFound();
+            }
+
+            //check movie uploader is current login user
+            if (movie.UploaderId != base.LoginUserId)
+            {
+                var msg = "It is not your movie. You can not update it.";
+                return base.ShowError(msg);
+
+            }
+
+            //upload file to s3
+            var file = Request.Form.Files[0];
+            if (file == null)
+            {
+                return NotFound();
+            }
+
+            //upload file to s3
+            var fileKey = await _s3Helper.UploadFileAsync(id, file.OpenReadStream());
+            if (string.IsNullOrEmpty(fileKey))
+            {
+                return NotFound();
+            }
+
+            //update movie
+            movie.FileKey = fileKey;
+            movie.FileUrl = _s3Helper.GetFileUrl(fileKey);
+            await _dynamoDbHelper.UpdateMovieAsync(movie);
+
+            //return to details page
+            return RedirectToAction("Details", "Movies", movie); //  redirect to index page 
+        }
+
 
     }
 }

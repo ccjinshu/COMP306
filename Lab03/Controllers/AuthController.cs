@@ -8,8 +8,8 @@ namespace Lab03.Controllers
     public  abstract  class AuthController : Controller
     {
           String loginUserId = null;
-          String loginName = null;
-
+          String loginName = null; 
+  
 
         public String LoginName
         {
@@ -35,7 +35,29 @@ namespace Lab03.Controllers
         }
 
         //override the default login page
+        public string GetModelStateValidMessage()
+        {
+            string msg = "";
 
+            if (!ModelState.IsValid)
+            {
+
+                foreach (var modelStateEntry in ModelState.Values)
+                {
+                    foreach (var error in modelStateEntry.Errors)
+                    {
+                        Console.WriteLine($"Model Error: {error.ErrorMessage}");
+                    }
+                }
+
+
+                var errors = ModelState.Values.SelectMany(v => v.Errors);
+                msg = errors.Aggregate("", (current, error) => current+ "\n" + error.ErrorMessage);
+
+            }
+
+            return msg;
+        }
 
 
         public override void OnActionExecuting(ActionExecutingContext context)
@@ -62,6 +84,17 @@ namespace Lab03.Controllers
             //save login name and id to viewbag
             ViewBag.LoginName = loginName;
             ViewBag.LoginUserId = loginUserId;
+
+
+
+             
+
+
+
+
+
+
+
 
 
 

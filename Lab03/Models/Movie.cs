@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using Amazon.DynamoDBv2.DataModel;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
@@ -47,6 +48,13 @@ public partial class Movie
     [DynamoDBProperty]
     [BindNever] 
     public List<Comment> Comments { get; set; }
+
+
+    [NotMapped]
+    public IFormFile MovieFile { get; set; }
+    [NotMapped]
+    public IFormFile CoverFile { get; set; }
+
 
     //constructor
     public Movie()

@@ -1,7 +1,7 @@
 ﻿@model Lab03.Models.Movie
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Movie";
 }
 
 <h1>Edit</h1>
@@ -10,9 +10,12 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="CoverImage" />
+            <input type="hidden" asp-for="FileKey" />
+            <input type="hidden" asp-for="FileUrl" />
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
                 <input asp-for="Title" class="form-control" />
@@ -40,24 +43,51 @@
             </div>
             <div class="form-group">
                 <label asp-for="Rating" class="control-label"></label>
-                <input asp-for="Rating" class="form-control" />
+                <input asp-for="Rating" class="form-control"  />
                 <span asp-validation-for="Rating" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="CoverImage" class="control-label"></label>
-                <input asp-for="CoverImage" class="form-control" />
-                <span asp-validation-for="CoverImage" class="text-danger"></span>
+             
+@*             <div class="form-group">
+                 <label asp-for="CoverImage" class="control-label"></label>
+                 <input asp-for="CoverImage" class="form-control" />
+                 <span asp-validation-for="CoverImage" class="text-danger"></span>
+             </div> *@
+ 
+
+
+@*              <div class="form-group">
+                 <label asp-for="FileKey" class="control-label"></label>
+                 <input asp-for="FileKey" class="form-control" />
+                 <span asp-validation-for="FileKey" class="text-danger"></span>
+             </div>
+             <div class="form-group">
+                 <label asp-for="FileUrl" class="control-label"></label>
+                 <input asp-for="FileUrl" class="form-control" />
+                 <span asp-validation-for="FileUrl" class="text-danger"></span>
+             </div> *@
+
+            <div>
+                <img id="imagePreview" name="imagePreview" src="@Model.CoverImage" alt="Preview"
+                     style="max-width: 300px; max-height: 300px; display:block " />
+
             </div>
+
             <div class="form-group">
-                <label asp-for="FileKey" class="control-label"></label>
-                <input asp-for="FileKey" class="form-control" />
-                <span asp-validation-for="FileKey" class="text-danger"></span>
+                <label class="control-label">Cover File </label>
+                <input id="CoverFile" name="CoverFile" class="form-control" type="file" accept="image/*" onchange="previewImage(this)" />
+              
             </div>
+
             <div class="form-group">
-                <label asp-for="FileUrl" class="control-label"></label>
-                <input asp-for="FileUrl" class="form-control" />
-                <span asp-validation-for="FileUrl" class="text-danger"></span>
-            </div><br>
+                <label   class="control-label">Movie File</label>
+                <input id="MovieFile" name="MovieFile" class="form-control" type="file" accept="video/*" />
+               
+            </div>
+
+             
+
+            
+            <br>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
@@ -72,3 +102,25 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+
+
+<script>
+    function previewImage(input) {
+        var preview = document.getElementById("imagePreview");
+        //set   preview  display  none
+        // preview.style.display = "none";
+
+        var file = input.files[0];
+
+        if (file) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+                //set   preview  display  block
+                preview.style.display = "block";
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+</script>
