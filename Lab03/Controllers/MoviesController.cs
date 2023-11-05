@@ -167,7 +167,7 @@ namespace Lab03.Controllers
             if (movie.UploaderId != null && movie.UploaderId != base.LoginUserId)
             {
                 var msg = "It is not your movie. You can not edit it.";
-                return base.ShowError(msg);
+                //return base.ShowError(msg);
 
             }
 
