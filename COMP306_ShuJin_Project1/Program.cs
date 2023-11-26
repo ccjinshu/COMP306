@@ -1,3 +1,4 @@
+using COMP306_ShuJin_Project1.Repositories;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal;
@@ -18,6 +19,10 @@ namespace COMP306_ShuJin_Project1
             builder.Services.AddDbContext<COMP306_ShuJin_Project1.Data.ApplicationDbContext>(options => { 
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection_local"));
             });
+
+
+            //register repositories 
+            builder.Services.AddScoped<IRoomRepository, RoomRepository>();
 
 
             // Add services to the container.
