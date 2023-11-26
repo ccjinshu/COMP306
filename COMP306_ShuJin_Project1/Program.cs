@@ -1,3 +1,8 @@
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal;
+
+
 namespace COMP306_ShuJin_Project1
 {
     public class Program
@@ -5,6 +10,15 @@ namespace COMP306_ShuJin_Project1
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+ 
+
+            //add dbcontext 
+
+            builder.Services.AddDbContext<COMP306_ShuJin_Project1.Data.ApplicationDbContext>(options => { 
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection_local"));
+            });
+
 
             // Add services to the container.
 
