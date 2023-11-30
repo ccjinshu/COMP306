@@ -60,5 +60,45 @@ namespace COMP306_ShuJin_Project1.Repositories
             _context.Entry(room).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }
+
+
+        //GetAvailableRoomsByStartDateAndEndDate
+        public async Task<IEnumerable<Room>> GetAvailableRoomsByStartDateAndEndDate(DateTime startDate, DateTime endDate)
+        {
+            var rooms = await _context.Rooms.ToListAsync();
+            var bookings = await _context.Bookings.ToListAsync();
+
+            var availableRooms = new List<Room>();
+
+            foreach (var room in rooms)
+            {
+                var isAvailable = true;
+                foreach (var booking in bookings)
+                {
+                    if (booking.RoomId == room.Id)
+                    {
+                        if (startDate >= booking.StartDate && startDate <= booking.EndDate)
+                        {
+                            isAvailable = false;
+                        }
+                        else if (endDate >= booking.StartDate && endDate <= booking.EndDate)
+                        {
+                            isAvailable = false;
+                        }
+                        else if (startDate <= booking.StartDate && endDate >= booking.EndDate)
+                        {
+                            isAvailable = false;
+                        }
+                    }
+                }
+                if (isAvailable)
+                {
+                    availableRooms.Add(room);
+                }
+            }
+            return availableRooms;
+        }
+
+
     }
 }

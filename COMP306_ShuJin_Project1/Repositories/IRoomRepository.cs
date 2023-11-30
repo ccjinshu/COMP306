@@ -15,6 +15,9 @@ namespace COMP306_ShuJin_Project1.Repositories
         //PatchRoom
         Task PatchRoomAsync(Room room);
 
+        //GetAvailableRoomsByStartDateAndEndDate
+        Task<IEnumerable<Room>> GetAvailableRoomsByStartDateAndEndDate(DateTime startDate, DateTime endDate);
+
 
 
     }

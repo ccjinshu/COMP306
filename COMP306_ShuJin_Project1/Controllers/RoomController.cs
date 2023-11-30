@@ -110,5 +110,19 @@ namespace COMP306_ShuJin_Project1.Controllers
             await _roomRepository.SaveAsync();
             return NoContent();
         }
+
+
+        // GET: api/Room/GetAvailableRoomsByStartDateAndEndDate?startDate=2021-01-01&endDate=2021-01-10
+        [HttpGet("GetAvailableRoomsByStartDateAndEndDate")]
+        public async Task<ActionResult<IEnumerable<RoomDTO>>> GetAvailableRoomsByStartDateAndEndDate([FromQuery] string startDate, [FromQuery] string endDate)
+        {
+
+            var startDateParsed = System.DateTime.Parse(startDate);
+            var endDateParsed = System.DateTime.Parse(endDate);
+
+            var rooms = await _roomRepository.GetAvailableRoomsByStartDateAndEndDate(  startDateParsed,endDateParsed);
+            return Ok(_mapper.Map<IEnumerable<RoomDTO>>(rooms));
+        }
+
     }
 }
