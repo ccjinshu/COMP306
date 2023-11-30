@@ -17,8 +17,11 @@ namespace COMP306_ShuJin_Project1.Repositories
 
 
         //Login
-        Task<User> LoginAsync(string email, string password);
-        Task<User> LogoutAsync();
-        
+        Task<User> LoginAsync(string email, string password); 
+
+
+        //Register
+        Task<User> RegisterAsync(string name, string email, string phoneNumber, string password);
+
     }
 }

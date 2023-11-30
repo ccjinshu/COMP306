@@ -74,10 +74,27 @@ namespace COMP306_ShuJin_Project1.Repositories
             return await _context.Users.FirstOrDefaultAsync(u => u.Email == email && u.Password == password);
         }
 
-        //Logout
-        public async Task<User> LogoutAsync()
+ 
+
+        //Register
+        public async Task<User> RegisterAsync(string name,string email, string password, string phoneNumber)
         {
-            return await _context.Users.FirstOrDefaultAsync();
+            //check if email exists
+            if (await _context.Users.AnyAsync(x => x.Email == email))
+                throw new Exception("Email " + email + " is already registered"); 
+
+            var user = new User
+            {
+                Name = name,
+
+                Email = email,
+
+                PhoneNumber = phoneNumber,
+                Password = password 
+            };
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+            return user;
         }
     }
 }

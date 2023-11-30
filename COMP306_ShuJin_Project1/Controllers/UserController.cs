@@ -110,5 +110,42 @@ namespace COMP306_ShuJin_Project1.Controllers
             await _userRepository.SaveAsync();
             return NoContent();
         }
+
+
+
+
+
+
+        //login         Task<User> LoginAsync(string email, string password); 
+        [HttpPost("login")]
+        public async Task<ActionResult<UserDTO>> Login( String email, String password)
+        {
+            var user = await _userRepository.LoginAsync(email, password);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return Ok(_mapper.Map<UserDTO>(user));
+             
+        }
+
+
+        //register
+        [HttpPost("register")]
+        public async Task<ActionResult<UserDTO>> Register([FromBody] UserDTO userDto)
+        {
+            var user = _mapper.Map<User>(userDto);
+            await _userRepository.AddUserAsync(user);
+            await _userRepository.SaveAsync();
+            return CreatedAtAction(nameof(GetUser), new { id = user.Id }, _mapper.Map<UserDTO>(user));
+        }
+
+
+
+
+
+
+
+
     }
 }
