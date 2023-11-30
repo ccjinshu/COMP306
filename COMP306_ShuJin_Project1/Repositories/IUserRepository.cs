@@ -4,10 +4,16 @@ namespace COMP306_ShuJin_Project1.Repositories
 {
     public interface IUserRepository
     {
-        User GetById(int id);
-        IEnumerable<User> GetAll();
-        void Add(User user);
-        void Update(User user);
-        void Delete(int id);
+        Task<IEnumerable<User>> GetAllUsersAsync();
+        Task<User> GetUserByIdAsync(int userId);
+        Task AddUserAsync(User user);
+        Task UpdateUserAsync(User user);
+        Task DeleteUserAsync(int userId);
+        Task<bool> SaveAsync();
+
+
+        //Patch
+        Task PatchUserAsync(User user);
+        
     }
 }

@@ -1,15 +1,12 @@
-﻿using COMP306_ShuJin_Project1.Data;
-using COMP306_ShuJin_Project1.Models; 
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore; 
-
+using Microsoft.EntityFrameworkCore;
+using COMP306_ShuJin_Project1.Data;
+using COMP306_ShuJin_Project1.Models;
 
 namespace COMP306_ShuJin_Project1.Repositories
 {
-   
-
     public class RoomRepository : IRoomRepository
     {
         private readonly ApplicationDbContext _context;
@@ -24,9 +21,9 @@ namespace COMP306_ShuJin_Project1.Repositories
             return await _context.Rooms.ToListAsync();
         }
 
-        public async Task<Room> GetRoomByIdAsync(int id)
+        public async Task<Room> GetRoomByIdAsync(int roomId)
         {
-            return await _context.Rooms.FindAsync(id);
+            return await _context.Rooms.FirstOrDefaultAsync(r => r.Id == roomId);
         }
 
         public async Task AddRoomAsync(Room room)
@@ -41,9 +38,9 @@ namespace COMP306_ShuJin_Project1.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteRoomAsync(int id)
+        public async Task DeleteRoomAsync(int roomId)
         {
-            var room = await _context.Rooms.FindAsync(id);
+            var room = await _context.Rooms.FindAsync(roomId);
             if (room != null)
             {
                 _context.Rooms.Remove(room);
@@ -51,30 +48,17 @@ namespace COMP306_ShuJin_Project1.Repositories
             }
         }
 
-        public Room GetById(int id)
+        public async Task<bool> SaveAsync()
         {
-            throw new NotImplementedException();
+            return await _context.SaveChangesAsync() >= 0;
         }
 
-        public IEnumerable<Room> GetAll()
-        {
-            throw new NotImplementedException();
-        }
+        //PatchRoom
 
-        public void Add(Room room)
+        public async Task PatchRoomAsync(Room room)
         {
-            throw new NotImplementedException();
-        }
-
-        public void Update(Room room)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(int id)
-        {
-            throw new NotImplementedException();
+            _context.Entry(room).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
         }
     }
-
 }
