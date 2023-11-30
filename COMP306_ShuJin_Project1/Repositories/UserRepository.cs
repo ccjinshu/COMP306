@@ -67,5 +67,17 @@ namespace COMP306_ShuJin_Project1.Repositories
             _context.Entry(user).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }
+
+        //Login
+        public async Task<User> LoginAsync(string email, string password)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email && u.Password == password);
+        }
+
+        //Logout
+        public async Task<User> LogoutAsync()
+        {
+            return await _context.Users.FirstOrDefaultAsync();
+        }
     }
 }

@@ -14,6 +14,11 @@ namespace COMP306_ShuJin_Project1.Repositories
 
         //Patch
         Task PatchUserAsync(User user);
+
+
+        //Login
+        Task<User> LoginAsync(string email, string password);
+        Task<User> LogoutAsync();
         
     }
 }
