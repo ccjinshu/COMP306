@@ -5,11 +5,14 @@ namespace COMP306_ShuJin_Project1.Repositories
 
     public interface IBookingRepository
     {
-        Booking GetById(int id);
-        IEnumerable<Booking> GetAll();
-        void Add(Booking booking);
-        void Update(Booking booking);
-        void Delete(int id);
+        Task<IEnumerable<Booking>> GetAllBookingsAsync();
+        Task<Booking> GetBookingByIdAsync(int bookingId);
+        Task<IEnumerable<Booking>> GetBookingsForRoomAsync(int roomId);
+        Task<IEnumerable<Booking>> GetBookingsForUserAsync(int userId);
+        Task AddBookingAsync(Booking booking);
+        Task UpdateBookingAsync(Booking booking);
+        Task DeleteBookingAsync(int bookingId);
+        Task<bool> SaveAsync();
     }
 
 
