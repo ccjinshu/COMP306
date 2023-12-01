@@ -63,11 +63,20 @@ namespace COMP306_ShuJin_Project1
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
+            //if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
-                app.UseSwaggerUI();
+                //app.UseSwaggerUI();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Comp306_ShuJin_Project1 API V1"); 
+                    c.RoutePrefix = string.Empty; // 这应该会让Swagger UI成为默认首页
+                });
+
             }
+
+            //app.UseHttpsRedirection();
+
 
             app.UseAuthorization();
 
