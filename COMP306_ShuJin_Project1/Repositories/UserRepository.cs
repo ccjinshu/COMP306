@@ -71,6 +71,15 @@ namespace COMP306_ShuJin_Project1.Repositories
         //Login
         public async Task<User> LoginAsync(string email, string password)
         {
+            //find by emai
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            if (user == null)
+                return null;
+            if (user.Password != password)
+                return null;
+             
+
+
             return await _context.Users.FirstOrDefaultAsync(u => u.Email == email && u.Password == password);
         }
 

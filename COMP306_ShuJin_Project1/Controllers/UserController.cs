@@ -118,9 +118,9 @@ namespace COMP306_ShuJin_Project1.Controllers
 
         //login         Task<User> LoginAsync(string email, string password); 
         [HttpPost("login")]
-        public async Task<ActionResult<UserDTO>> Login( String email, String password)
+        public async Task<ActionResult<UserDTO>> Login(string email, string password)
         {
-            var user = await _userRepository.LoginAsync(email, password);
+            var user = await _userRepository.LoginAsync(email, password); 
             if (user == null)
             {
                 return NotFound();
