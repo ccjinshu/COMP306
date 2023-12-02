@@ -4,3 +4,9 @@
 PM> Add-Migration InitialCreatePqsql -OutputDir Data/Migrations_pgsql
 
 PM> Update-Database
+
+
+//½Y˜‹×ƒ»¯•r¸üÐÂ
+
+
+Add-Migration update_db -OutputDir Data/Migrations_pgsql

@@ -1,4 +1,4 @@
-﻿namespace COMP306_ShuJin_Project1.Models
+﻿namespace CcbnbApi.Models
 { 
     public class Room
     {
@@ -9,8 +9,5 @@
         public string Status { get; set; }
 
         public string Desc { get; set; }
-
-        //imgurl
-        public string ImgUrl { get; set; }
     }
 }

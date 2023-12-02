@@ -1,11 +1,13 @@
-using COMP306_ShuJin_Project1.Data;
-using COMP306_ShuJin_Project1.Repositories;
+using CcbnbApi.Data;
+using CcbnbApi.Repositories;
+using CcbnbApi.Data;
+using CcbnbApi.Repositories;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal;
 
 
-namespace COMP306_ShuJin_Project1
+namespace CcbnbApi
 {
     public class Program
     {
@@ -47,7 +49,7 @@ namespace COMP306_ShuJin_Project1
 
             //register automapper
 
-             
+
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             // Add services to the container.
@@ -69,8 +71,8 @@ namespace COMP306_ShuJin_Project1
                 //app.UseSwaggerUI();
                 app.UseSwaggerUI(c =>
                 {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Comp306_ShuJin_Project1 API V1"); 
-                    c.RoutePrefix =   string.Empty;
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Comp306_ShuJin_Project1 API V1");
+                    c.RoutePrefix = string.Empty; // 这应该会让Swagger UI成为默认首页
                 });
 
             }

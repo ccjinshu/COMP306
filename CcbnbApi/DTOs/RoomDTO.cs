@@ -1,4 +1,4 @@
-﻿namespace COMP306_ShuJin_Project1.DTOs
+﻿namespace CcbnbApi.DTOs
 {
     public class RoomDTO
     {
@@ -9,12 +9,5 @@
 
         //details infomation
         public string  Desc  { get; set; }
-
-        //status
-        public string Status { get; set; }
-
-
-        //imgurl
-        public string ImgUrl { get; set; }
     }
 }

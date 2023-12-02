@@ -1,7 +1,7 @@
 ﻿
 using System;
 
-namespace COMP306_ShuJin_Project1.Models
+namespace CcbnbApi.Models
 {
     public class Booking
     {
@@ -15,8 +15,5 @@ namespace COMP306_ShuJin_Project1.Models
         // Navigation properties
         public User User { get; set; }
         public Room Room { get; set; }
-
-        //remarks
-        public string Remark { get; set; }
     }
 }
