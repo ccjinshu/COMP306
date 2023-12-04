@@ -86,7 +86,7 @@ namespace COMP306_ShuJin_Project1
                 //app.UseSwaggerUI();
                 app.UseSwaggerUI(c =>
                 {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Comp306_ShuJin_Project1 API V1"); 
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Comp306_ShuJin_Project1 API v1"); 
                     c.RoutePrefix =   string.Empty;
                 });
 

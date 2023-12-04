@@ -47,8 +47,7 @@ namespace COMP306_ShuJin_Project1.Controllers
         public async Task<ActionResult<BookingDTO>> CreateBooking([FromBody] BookingDTO bookingDto)
         {
             var booking = _mapper.Map<Booking>(bookingDto);
-            await _bookingRepository.AddBookingAsync(booking);
-            await _bookingRepository.SaveAsync();
+            await _bookingRepository.AddBookingAsync(booking); 
             return CreatedAtAction(nameof(GetBooking), new { id = booking.Id }, _mapper.Map<BookingDTO>(booking));
         }
 

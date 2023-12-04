@@ -9,4 +9,7 @@ PM> Update-Database
 //½Y˜‹×ƒ»¯•r¸üĞÂ
 
 
-Add-Migration update_db -OutputDir Data/Migrations_pgsql
+
+PM> Add-Migration update_db_v2 -OutputDir Data/Migrations_pgsql
+
+PM> Update-Database

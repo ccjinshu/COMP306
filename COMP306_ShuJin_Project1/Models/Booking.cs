@@ -16,7 +16,18 @@ namespace COMP306_ShuJin_Project1.Models
         public User User { get; set; }
         public Room Room { get; set; }
 
+
+        //guestName
+        public string GuestName { get; set; }
+        //guestPhone
+        public string GuestPhone { get; set; }
+        //price 
+        //status
+        public string Status { get; set; }
+
         //remarks
         public string Remark { get; set; }
+ 
+
     }
 }
