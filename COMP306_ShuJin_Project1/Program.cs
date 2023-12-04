@@ -3,7 +3,8 @@ using COMP306_ShuJin_Project1.Repositories;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal;
-
+using Microsoft.OpenApi.Models;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace COMP306_ShuJin_Project1
 {
@@ -63,7 +64,43 @@ namespace COMP306_ShuJin_Project1
             builder.Services.AddControllers().AddNewtonsoftJson();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen( c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "COMP306_ShuJin_Project1 API", Version = "v1" });
+
+                //custom server list
+                c.AddServer(new OpenApiServer
+                {
+                    Url = "https://192.168.2.10:8306",
+                    Description = "local Lan server"
+                });
+
+                c.AddServer(new OpenApiServer
+                {
+                    Url = "http://v6-510460395.ca-central-1.elb.amazonaws.com/",
+                    Description = "AWS server"
+                });
+
+                c.AddServer(new OpenApiServer
+                {
+                    Url = "https://34.128.145.217.nip.io/bnb_auth_v1",
+                    Description = "google proxy server (with apiKey) , https://my-project-apigee-test-406821-project1.apigee.io/docs/ccbnb/1/overview",
+
+                });
+
+                c.AddServer(new OpenApiServer
+                {
+                    Url = "https://34.128.145.217.nip.io/bnb_v1",
+                    Description = "google proxy server , https://my-project-apigee-test-406821-project1.apigee.io/docs/ccbnb/1/overview",
+
+                });
+
+ 
+
+
+
+
+            });
 
             //allow cors
             builder.Services.AddCors(options =>
