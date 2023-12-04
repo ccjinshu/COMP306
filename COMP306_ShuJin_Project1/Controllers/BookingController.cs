@@ -180,7 +180,7 @@ namespace COMP306_ShuJin_Project1.Controllers
         //get bookings by user id
 
         // //Post : api/Booking/mybookings
-        [HttpGet("mybookings")]
+        [HttpPost("mybookings")]
         public async Task<ActionResult<IEnumerable<BookingDTO>>> GetBookingsForUserAsync( )
         {
             
@@ -215,6 +215,39 @@ namespace COMP306_ShuJin_Project1.Controllers
             }
 
             return Ok(bookingDTOs); 
+        }
+
+
+        [HttpPost("myorders")]
+        public async Task<ActionResult<IEnumerable<BookingDTO>>> GetBookingsForUserAsync([FromBody] SimpleDTO simpleDTO)
+        {
+            var dataString = simpleDTO.Data;
+
+            int.TryParse(dataString, out var userId);
+
+            userId = userId==0?-1:userId;
+
+            //print id
+            System.Console.WriteLine("GetBookingsForUserAsync userId:" + userId);
+
+            var bookings = await _bookingRepository.GetBookingsForUserAsync(userId);
+            var bookingDTOs = new List<BookingDTO>();
+
+            foreach (var booking in bookings)
+            {
+                // Fetch room and user details for each booking
+                var room = await _roomRepository.GetRoomByIdAsync(booking.RoomId);
+                var user = await _userRepository.GetUserByIdAsync(booking.UserId);
+
+                // Map entities to DTOs
+                var bookingDTO = _mapper.Map<BookingDTO>(booking);
+                bookingDTO.Room = _mapper.Map<RoomDTO>(room);
+                bookingDTO.User = _mapper.Map<UserDTO>(user);
+
+                bookingDTOs.Add(bookingDTO);
+            }
+
+            return Ok(bookingDTOs);
         }
 
 

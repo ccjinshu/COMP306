@@ -8,4 +8,18 @@
 
 
     }
+
+
+    public class SimpleDTO
+    {
+        public string? Data { get; set; } 
+
+
+    }
+
+
+
+
+
+
 }
