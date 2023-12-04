@@ -119,9 +119,9 @@ namespace COMP306_ShuJin_Project1.Controllers
 
         //login         Task<User> LoginAsync(string email, string password); 
         [HttpPost("login")]
-        public async Task<ActionResult<UserDTO>> Login(string email, string password)
+        public async Task<ActionResult<UserDTO>> Login([FromBody] LoginDTO loginDTO)
         {
-            var user = await _userRepository.LoginAsync(email, password); 
+            var user = await _userRepository.LoginAsync(loginDTO.Email, loginDTO.Password); 
             if (user == null)
             {
                 return NotFound();
@@ -130,7 +130,7 @@ namespace COMP306_ShuJin_Project1.Controllers
              
         }
 
-
+         
         //register
         [HttpPost("register")]
         public async Task<ActionResult<UserDTO>> Register([FromBody] UserDTO userDto)
