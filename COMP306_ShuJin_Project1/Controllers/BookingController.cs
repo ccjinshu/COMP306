@@ -180,11 +180,41 @@ namespace COMP306_ShuJin_Project1.Controllers
         //get bookings by user id
 
         // //Post : api/Booking/mybookings
-        [HttpPost("mybookings")]
-        public async Task<ActionResult<IEnumerable<BookingDTO>>> GetBookingsForUserAsync([FromBody] int userId)
+        [HttpGet("mybookings")]
+        public async Task<ActionResult<IEnumerable<BookingDTO>>> GetBookingsForUserAsync( )
         {
-            var bookings = await _bookingRepository.GetBookingsForUserAsync(userId);
-            return Ok(_mapper.Map<IEnumerable<BookingDTO>>(bookings));
+            
+            if (!Request.Headers.TryGetValue("UserId", out var userIdHeaderValue))
+            {
+                return BadRequest("UserId header is missing.");
+            }
+
+            if (!int.TryParse(userIdHeaderValue, out var userId))
+            {
+                return BadRequest("Invalid UserId header value.");
+            }
+             
+            //print id
+            System.Console.WriteLine("GetBookingsForUserAsync userId:"+ userId);
+
+            var bookings = await _bookingRepository.GetBookingsForUserAsync(userId); 
+            var bookingDTOs = new List<BookingDTO>();
+
+            foreach (var booking in bookings)
+            {
+                // Fetch room and user details for each booking
+                var room = await _roomRepository.GetRoomByIdAsync(booking.RoomId);
+                var user = await _userRepository.GetUserByIdAsync(booking.UserId);
+
+                // Map entities to DTOs
+                var bookingDTO = _mapper.Map<BookingDTO>(booking);
+                bookingDTO.Room = _mapper.Map<RoomDTO>(room);
+                bookingDTO.User = _mapper.Map<UserDTO>(user);
+
+                bookingDTOs.Add(bookingDTO);
+            }
+
+            return Ok(bookingDTOs); 
         }
 
 
