@@ -50,6 +50,20 @@ namespace COMP306_ShuJin_Project1.Repositories
         // Adds a new booking for a room.
         public async Task AddBookingAsync(Booking booking)
         {
+            //get userid
+          //print on console
+          System.Console.WriteLine("User Id is " + booking.UserId);
+
+
+
+
+            booking.Room = await _context.Rooms.FindAsync(booking.RoomId);
+            //booking.User = await _context.Users.FindAsync(booking.UserId);
+            booking.Status = "Confirmed";
+            booking.TotalPrice = booking.Room.Price * (booking.EndDate - booking.StartDate).Days;
+
+
+
             _context.Bookings.Add(booking);
             await _context.SaveChangesAsync();
         }

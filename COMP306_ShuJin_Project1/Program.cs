@@ -67,11 +67,18 @@ namespace COMP306_ShuJin_Project1
             builder.Services.AddSwaggerGen( c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "COMP306_ShuJin_Project1 API", Version = "v1" });
+                //http://localhost:8306/
+                //custom server list
+                c.AddServer(new OpenApiServer
+                {
+                    Url = "http://localhost:8306",
+                    Description = "localhost  "
+                });
 
                 //custom server list
                 c.AddServer(new OpenApiServer
                 {
-                    Url = "https://192.168.2.10:8306",
+                    Url = "http://192.168.2.10:8306",
                     Description = "local Lan server"
                 });
 

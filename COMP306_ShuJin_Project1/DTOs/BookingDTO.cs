@@ -18,6 +18,8 @@
         //status
         public string Status { get; set; }
 
+        //remarks
+        public string Remark { get; set; }
          
     }
 }

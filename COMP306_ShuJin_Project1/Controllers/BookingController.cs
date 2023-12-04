@@ -46,6 +46,12 @@ namespace COMP306_ShuJin_Project1.Controllers
         [HttpPost]
         public async Task<ActionResult<BookingDTO>> CreateBooking([FromBody] BookingDTO bookingDto)
         {
+
+            //covert date to datetime format for database
+            bookingDto.StartDate = bookingDto.StartDate.ToUniversalTime().Add(DateTime.Now.TimeOfDay);
+            bookingDto.EndDate = bookingDto.EndDate.ToUniversalTime().Add(DateTime.Now.TimeOfDay);
+
+
             var booking = _mapper.Map<Booking>(bookingDto);
             await _bookingRepository.AddBookingAsync(booking); 
             return CreatedAtAction(nameof(GetBooking), new { id = booking.Id }, _mapper.Map<BookingDTO>(booking));
