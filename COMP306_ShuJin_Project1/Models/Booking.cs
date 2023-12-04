@@ -13,8 +13,8 @@ namespace COMP306_ShuJin_Project1.Models
         public decimal TotalPrice { get; set; }
 
         // Navigation properties
-        public User User { get; set; }
-        public Room Room { get; set; }
+        public   User User { get; set; }
+        public   Room Room { get; set; }
 
 
         //guestName

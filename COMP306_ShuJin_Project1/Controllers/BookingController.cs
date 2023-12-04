@@ -13,12 +13,18 @@ namespace COMP306_ShuJin_Project1.Controllers
     [Route("api/[controller]")]
     public class BookingController : ControllerBase
     {
+
+
+        private readonly IRoomRepository _roomRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IBookingRepository _bookingRepository;
         private readonly IMapper _mapper;
 
-        public BookingController(IBookingRepository bookingRepository, IMapper mapper)
+        public BookingController(IBookingRepository bookingRepository, IUserRepository userRepository, IRoomRepository roomRepository, IMapper mapper)
         {
             _bookingRepository = bookingRepository;
+            _userRepository = userRepository;
+            _roomRepository = roomRepository;
             _mapper = mapper;
         }
 
@@ -26,8 +32,30 @@ namespace COMP306_ShuJin_Project1.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BookingDTO>>> GetAllBookings()
         {
+            //var bookings = await _bookingRepository.GetAllBookingsAsync();
+            //return Ok(_mapper.Map<IEnumerable<BookingDTO>>(bookings));
+
+
             var bookings = await _bookingRepository.GetAllBookingsAsync();
-            return Ok(_mapper.Map<IEnumerable<BookingDTO>>(bookings));
+            var bookingDTOs = new List<BookingDTO>();
+
+            foreach (var booking in bookings)
+            {
+                // Fetch room and user details for each booking
+                var room = await _roomRepository.GetRoomByIdAsync(booking.RoomId);
+                var user = await _userRepository.GetUserByIdAsync(booking.UserId);
+
+                // Map entities to DTOs
+                var bookingDTO = _mapper.Map<BookingDTO>(booking);
+                bookingDTO.Room = _mapper.Map<RoomDTO>(room);
+                bookingDTO.User = _mapper.Map<UserDTO>(user);
+
+                bookingDTOs.Add(bookingDTO);
+            }
+
+            return Ok(bookingDTOs);
+
+
         }
 
         // GET: api/Booking/{id}
@@ -35,11 +63,27 @@ namespace COMP306_ShuJin_Project1.Controllers
         public async Task<ActionResult<BookingDTO>> GetBooking(int id)
         {
             var booking = await _bookingRepository.GetBookingByIdAsync(id);
+
             if (booking == null)
             {
                 return NotFound();
             }
-            return Ok(_mapper.Map<BookingDTO>(booking));
+
+            //TODO: get room by booking.RoomId
+            var room = await _roomRepository.GetRoomByIdAsync(booking.RoomId); 
+            //TODO: get user by booking.UserId
+            var user = await _userRepository.GetUserByIdAsync(booking.UserId);
+
+            booking.Room = room;
+            booking.User = user;
+
+
+            var bookingDTO = _mapper.Map<BookingDTO>(booking);
+            bookingDTO.Room = _mapper.Map<RoomDTO>(room); // Map Room to RoomDTO
+            bookingDTO.User = _mapper.Map<UserDTO>(user); // Map User to UserDTO
+
+            return Ok(bookingDTO); 
+
         }
 
         // POST: api/Booking

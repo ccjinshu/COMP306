@@ -93,6 +93,7 @@ namespace COMP306_ShuJin_Project1.Controllers
             _mapper.Map(userDto, user);
             await _userRepository.UpdateUserAsync(user);
             await _userRepository.SaveAsync();
+
             return NoContent();
         }
 

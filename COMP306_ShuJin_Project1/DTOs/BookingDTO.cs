@@ -20,6 +20,12 @@
 
         //remarks
         public string Remark { get; set; }
+
+        //how room info
+        public RoomDTO Room { get; set; }
+
+        //how user info
+        public UserDTO User { get; set; }
          
     }
 }

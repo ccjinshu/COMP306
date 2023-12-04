@@ -39,7 +39,9 @@ namespace COMP306_ShuJin_Project1
             //else if (usePostgreSql)
             //{
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSqlConnection3")));
+                options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSqlConnection3"))); 
+
+
             //}
 
 
