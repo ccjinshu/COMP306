@@ -65,37 +65,76 @@ namespace COMP306_ShuJin_Project1.Repositories
         //GetAvailableRoomsByStartDateAndEndDate
         public async Task<IEnumerable<Room>> GetAvailableRoomsByStartDateAndEndDate(DateTime startDate, DateTime endDate)
         {
-            var rooms = await _context.Rooms.ToListAsync();
-            var bookings = await _context.Bookings.ToListAsync();
 
-            var availableRooms = new List<Room>();
+            ////use linq query the available rooms by start date and end date
+            var availableRooms = await _context.Rooms
+                .Where(r => !_context.Bookings
+                .Any(b => b.RoomId == r.Id && ((startDate >= b.StartDate && startDate <= b.EndDate)
+                || (endDate >= b.StartDate && endDate <= b.EndDate)
+                || (startDate <= b.StartDate && endDate >= b.EndDate)))).ToListAsync();
 
-            foreach (var room in rooms)
-            {
-                var isAvailable = true;
-                foreach (var booking in bookings)
-                {
-                    if (booking.RoomId == room.Id)
-                    {
-                        if (startDate >= booking.StartDate && startDate <= booking.EndDate)
-                        {
-                            isAvailable = false;
-                        }
-                        else if (endDate >= booking.StartDate && endDate <= booking.EndDate)
-                        {
-                            isAvailable = false;
-                        }
-                        else if (startDate <= booking.StartDate && endDate >= booking.EndDate)
-                        {
-                            isAvailable = false;
-                        }
-                    }
-                }
-                if (isAvailable)
-                {
-                    availableRooms.Add(room);
-                }
-            }
+
+            return availableRooms;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            //var rooms = await _context.Rooms.ToListAsync();
+            //var bookings = await _context.Bookings.ToListAsync();
+
+            //var availableRooms = new List<Room>();
+
+            //foreach (var room in rooms)
+            //{
+            //    var isAvailable = true;
+            //    foreach (var booking in bookings)
+            //    {
+            //        if (booking.RoomId == room.Id)
+            //        {
+            //            if (startDate >= booking.StartDate && startDate <= booking.EndDate)
+            //            {
+            //                isAvailable = false;
+            //            }
+            //            else if (endDate >= booking.StartDate && endDate <= booking.EndDate)
+            //            {
+            //                isAvailable = false;
+            //            }
+            //            else if (startDate <= booking.StartDate && endDate >= booking.EndDate)
+            //            {
+            //                isAvailable = false;
+            //            }
+            //        }
+            //    }
+            //    if (isAvailable)
+            //    {
+            //        availableRooms.Add(room);
+            //    }
+            //}
+
+
+
+
+
+
+
+
+
+
+
+
+
             return availableRooms;
         }
 

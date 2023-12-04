@@ -55,10 +55,20 @@ namespace COMP306_ShuJin_Project1.Repositories
           System.Console.WriteLine("User Id is " + booking.UserId);
 
 
+            var room = await _context.Rooms.FindAsync(booking.RoomId);
+            var user = await _context.Users.FindAsync(booking.UserId);
+            if (room == null || user == null)
+            {
+               return;
+            }
 
 
-            booking.Room = await _context.Rooms.FindAsync(booking.RoomId);
-            //booking.User = await _context.Users.FindAsync(booking.UserId);
+            booking.Room = room;
+            booking.User = user;
+            
+
+            int days = (booking.EndDate - booking.StartDate).Days;
+
             booking.Status = "Confirmed";
             booking.TotalPrice = booking.Room.Price * (booking.EndDate - booking.StartDate).Days;
 

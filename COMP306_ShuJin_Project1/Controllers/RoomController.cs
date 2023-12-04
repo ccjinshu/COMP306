@@ -117,10 +117,16 @@ namespace COMP306_ShuJin_Project1.Controllers
         public async Task<ActionResult<IEnumerable<RoomDTO>>> GetAvailableRoomsByStartDateAndEndDate([FromQuery] string startDate, [FromQuery] string endDate)
         {
 
+
             var startDateParsed = System.DateTime.Parse(startDate);
             var endDateParsed = System.DateTime.Parse(endDate);
 
-            var rooms = await _roomRepository.GetAvailableRoomsByStartDateAndEndDate(  startDateParsed,endDateParsed);
+            //covert date to datetime format for database
+           var start = startDateParsed.ToUniversalTime().Add(DateTime.Now.TimeOfDay);
+           var  end  =  endDateParsed.ToUniversalTime().Add(DateTime.Now.TimeOfDay);
+
+
+            var rooms = await _roomRepository.GetAvailableRoomsByStartDateAndEndDate(start, end);
             return Ok(_mapper.Map<IEnumerable<RoomDTO>>(rooms));
         }
 

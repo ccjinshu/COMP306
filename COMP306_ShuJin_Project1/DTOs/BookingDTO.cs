@@ -10,22 +10,22 @@
          
         
         //guestName
-        public string GuestName { get; set; }
+        public string? GuestName { get; set; }
         //guestPhone
-        public string GuestPhone { get; set; }
+        public string? GuestPhone { get; set; }
         //price
         public decimal TotalPrice { get; set; }
         //status
-        public string Status { get; set; }
+        public string? Status { get; set; }
 
         //remarks
-        public string Remark { get; set; }
+        public string? Remark { get; set; }
 
         //how room info
-        public RoomDTO Room { get; set; }
+        public   RoomDTO? Room { get; set; }
 
         //how user info
-        public UserDTO User { get; set; }
+        public   UserDTO? User { get; set; }
          
     }
 }

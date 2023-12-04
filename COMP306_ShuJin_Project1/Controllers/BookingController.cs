@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using COMP306_ShuJin_Project1.DTOs;
 using COMP306_ShuJin_Project1.Models;
 using COMP306_ShuJin_Project1.Repositories;
+using Newtonsoft.Json.Linq;
+using System.Text.Json;
 
 namespace COMP306_ShuJin_Project1.Controllers
 {
@@ -85,11 +87,24 @@ namespace COMP306_ShuJin_Project1.Controllers
             return Ok(bookingDTO); 
 
         }
+        
+        
 
         // POST: api/Booking
         [HttpPost]
         public async Task<ActionResult<BookingDTO>> CreateBooking([FromBody] BookingDTO bookingDto)
-        {
+        {  
+
+            var room = await _roomRepository.GetRoomByIdAsync(bookingDto.RoomId);
+            var user = await _userRepository.GetUserByIdAsync(bookingDto.UserId);
+
+            if (room == null || user == null)
+            {
+                var msg="Room or User not found";
+                System.Console.WriteLine(msg);
+                return NotFound(msg);
+               
+            } 
 
             //covert date to datetime format for database
             bookingDto.StartDate = bookingDto.StartDate.ToUniversalTime().Add(DateTime.Now.TimeOfDay);
@@ -99,7 +114,8 @@ namespace COMP306_ShuJin_Project1.Controllers
             var booking = _mapper.Map<Booking>(bookingDto);
             await _bookingRepository.AddBookingAsync(booking); 
             return CreatedAtAction(nameof(GetBooking), new { id = booking.Id }, _mapper.Map<BookingDTO>(booking));
-        }
+        } 
+
 
         // PUT: api/Booking/{id}
         [HttpPut("{id}")]
@@ -159,5 +175,18 @@ namespace COMP306_ShuJin_Project1.Controllers
             await _bookingRepository.SaveAsync();
             return NoContent();
         }
+
+
+        //get bookings by user id
+
+        // //Post : api/Booking/mybookings
+        [HttpPost("mybookings")]
+        public async Task<ActionResult<IEnumerable<BookingDTO>>> GetBookingsForUserAsync([FromBody] int userId)
+        {
+            var bookings = await _bookingRepository.GetBookingsForUserAsync(userId);
+            return Ok(_mapper.Map<IEnumerable<BookingDTO>>(bookings));
+        }
+
+
     }
 }

@@ -10,11 +10,7 @@ namespace COMP306_ShuJin_Project1.Models
         public int RoomId { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public decimal TotalPrice { get; set; }
-
-        // Navigation properties
-        public   User User { get; set; }
-        public   Room Room { get; set; }
+        public decimal TotalPrice { get; set; } 
 
 
         //guestName
@@ -27,7 +23,13 @@ namespace COMP306_ShuJin_Project1.Models
 
         //remarks
         public string Remark { get; set; }
- 
+
+
+        // Navigation properties
+        public User User { get; set; }
+        public Room Room { get; set; }
+
+
 
     }
 }
