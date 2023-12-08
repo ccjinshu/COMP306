@@ -6,7 +6,7 @@ using System.Security.Policy;
 
 namespace CCBnb_Admin_Web.Controllers
 {
-    public class RoomController : Controller
+    public class RoomController : ApiController
     {
         // GET: RoomController
         public async Task<ActionResult> IndexAsync()
@@ -18,9 +18,9 @@ namespace CCBnb_Admin_Web.Controllers
 
 
             //call restapi to get all rooms
-            var apiUrl= "http://v6-510460395.ca-central-1.elb.amazonaws.com/api/Room";
-            var client = new HttpClient ();
-            client.DefaultRequestHeaders.Add("Accept", "application/json");
+            var apiUrl= "/api/Room";
+            var client = base.Client;
+            //client.DefaultRequestHeaders.Add("Accept", "application/json");
             var response = await client.GetAsync(apiUrl);
             //print log with varbiables name and value to console
             Console.WriteLine($"apiUrl: {apiUrl}");
