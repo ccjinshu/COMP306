@@ -174,8 +174,95 @@ namespace CCBnb_Admin_Web.Controllers
 
 
         }
-           
 
+
+
+
+        //Enable Room ; PATCH: api/Room/5
+        [HttpPatch]
+        public async Task<ActionResult> EnableAsync(int id)
+        {
+            //set patchData
+            var patchData = new[]
+            {
+                new
+                {
+                    operationType = 0,
+                    path = "Status",
+                    op = "replace",
+                    value = "Available"
+                }
+            };
+
+            //API Method , PUT : api/Room/5
+            var apiUrl = $"/api/Room/{id}";
+            var client = base.Client;
+            var response = await client.PatchAsync(apiUrl,
+                               new StringContent(JsonConvert.SerializeObject(patchData), Encoding.UTF8, "application/json")
+                                              );
+            Console.WriteLine($"apiUrl: {apiUrl}");
+            Console.WriteLine($"response: {response}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                ViewData["Error"] = $"Error when update for room {id}";
+                return View();
+            }
+            else
+            {
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
+        //Disable Room ; PATCH: api/Room/5
+        [HttpPatch]
+        public async Task<ActionResult> DisableAsync(int id)
+        {
+
+//            curl - X 'PATCH' \
+//  'http://localhost:8306/api/Room/1' \
+//  -H 'accept: */*' \
+//  -H 'Content-Type: application/json-patch+json' \
+//  -d '[
+//  {
+//                "operationType": 0,
+//    "path": "Status",
+//    "op": "replace", 
+//    "value": "Disable"
+//  }
+//]'
+            //set patchData
+            var patchData = new[]
+            {
+                new
+                {
+                    operationType = 0,
+                    path = "Status",
+                    op = "replace",
+                    value = "Unavailable"
+                }
+            }; 
+
+
+            //API Method , PUT : api/Room/5
+            var apiUrl = $"/api/Room/{id}";
+            var client = base.Client;
+            var response = await client.PatchAsync(apiUrl,
+                                              new StringContent(JsonConvert.SerializeObject(patchData), Encoding.UTF8, "application/json")
+                                                                                           );
+            Console.WriteLine($"apiUrl: {apiUrl}");
+            Console.WriteLine($"response: {response}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                ViewData["Error"] = $"Error when update for room {id}";
+                return View();
+            }
+            else
+            {
+                return RedirectToAction(nameof(Index));
+            }
+        }
 
 
 
