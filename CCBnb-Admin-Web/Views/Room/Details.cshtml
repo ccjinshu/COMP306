@@ -39,6 +39,31 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Status)
+
+
+            @{
+                if (Model.Status == "Available" && Model.Status != "Occupied")
+                {
+                    // <a asp-action="Disable" asp-route-id="@Model.Id">Disable</a>
+
+                    //call disable action
+                    <button onclick="Disable(@Model.Id)">Disable</button>
+
+
+                }
+            }
+
+            @{
+                if (Model.Status == "Unavailable")
+                {
+                    // <a asp-action="Enable" asp-route-id="@Model.Id">Enable</a>
+                    <button onclick="Enable(@Model.Id)">Enable</button>
+
+
+                }
+            }
+
+
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.ImgUrl)
@@ -49,29 +74,7 @@
     </dl>
 </div>
 <div>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-
-     @{if (Model.Status == "Available" && Model.Status != "Occupied")
-        {
-    // <a asp-action="Disable" asp-route-id="@Model.Id">Disable</a>
-
-    //call disable action
-<button onclick="Disable(@Model.Id)">Disable</button>
-
-
-        }
-    }
-    
-     @{if (Model.Status == "Unavailable")
-        {
-        // <a asp-action="Enable" asp-route-id="@Model.Id">Enable</a>
-         <button onclick="Enable(@Model.Id)">Enable</button>
-
-
-        }
-    }
-
-
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id })  
     | <a asp-action="Index">Back to List</a>
 </div>
 <script>
