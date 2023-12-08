@@ -10,7 +10,8 @@ namespace CCBnb_Admin_Web.Controllers
     {
         private readonly HttpClient client;
         private const string ApiKey = "AAztAHKI9cUnlVHzxDqtY1g43aLr4FyrJJkGAbhQTBmDfm94";
-        private const string ApiBaseUrl = "https://34.128.145.217.nip.io/bnb_auth_v1";
+        //private const string ApiBaseUrl = "https://34.128.145.217.nip.io/bnb_auth_v1";
+        private const string ApiBaseUrl = "http://localhost:8306";
 
         private const string ApiHost = "https://34.128.145.217.nip.io";
 
@@ -34,6 +35,9 @@ namespace CCBnb_Admin_Web.Controllers
         {
             protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
             {
+               
+
+
                 
                 //拦截API请求的 Path
                 var apiPath = request.RequestUri.AbsolutePath;
@@ -47,12 +51,20 @@ namespace CCBnb_Admin_Web.Controllers
 
 
 
+               
 
 
                 // Append the API Key to each request
                 var uriBuilder = new UriBuilder(targetUri);
                 var query = System.Web.HttpUtility.ParseQueryString(uriBuilder.Query);
-                query["apikey"] = ApiKey;
+
+                //check if path has /bnb_auth_v1 ,add apikey
+                if (ApiBaseUrl.ToUpper().Contains("bnb_auth_v1".ToUpper()))
+                {
+                    query["apikey"] = ApiKey;
+
+                }
+
                 uriBuilder.Query = query.ToString();
                 request.RequestUri = uriBuilder.Uri;
 

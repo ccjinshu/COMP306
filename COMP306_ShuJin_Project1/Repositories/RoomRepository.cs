@@ -18,7 +18,9 @@ namespace COMP306_ShuJin_Project1.Repositories
 
         public async Task<IEnumerable<Room>> GetAllRoomsAsync()
         {
-            return await _context.Rooms.ToListAsync();
+            return await _context.Rooms
+                .OrderBy(r => r.Number)
+                .ToListAsync();
         }
 
         public async Task<Room> GetRoomByIdAsync(int roomId)
@@ -67,11 +69,20 @@ namespace COMP306_ShuJin_Project1.Repositories
         {
 
             ////use linq query the available rooms by start date and end date
+            /// Room.Status == "Available" &&
             var availableRooms = await _context.Rooms
                 .Where(r => !_context.Bookings
-                .Any(b => b.RoomId == r.Id && ((startDate >= b.StartDate && startDate <= b.EndDate)
+                .Any(b => b.RoomId == r.Id 
+                && (
+                (startDate >= b.StartDate && startDate <= b.EndDate)
                 || (endDate >= b.StartDate && endDate <= b.EndDate)
-                || (startDate <= b.StartDate && endDate >= b.EndDate)))).ToListAsync();
+                || (startDate <= b.StartDate && endDate >= b.EndDate)
+
+                )))
+                .Where(r => r.Status == "Available")
+                .OrderBy(r => r.Number) //order by room number
+                .ToListAsync();
+            
 
 
             return availableRooms;
