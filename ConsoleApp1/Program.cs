@@ -14,9 +14,6 @@ string targetBucketName = "lab4-image-thumbnail";
   //DynamoDBHelper.InsertLabelDataAsync( bucketName,  fileKey,  "0.98");
 
 
-//test
-//await S3ImageProcessor.CreateAndUploadThumbnailToS3("ImageLabel", "ABC", "ImageLabel", 100, 100);
-  S3ImageProcessor.CreateAndUploadThumbnailToS3(bucketName, fileKey, targetBucketName, 100, 100);
 
 //test detect label 
 RekognitionHelper.detectLabelAndSaveLabelToDb(bucketName, fileKey);
