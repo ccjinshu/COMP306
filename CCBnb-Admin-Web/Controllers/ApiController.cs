@@ -10,8 +10,8 @@ namespace CCBnb_Admin_Web.Controllers
     {
         private readonly HttpClient client;
         private const string ApiKey = "AAztAHKI9cUnlVHzxDqtY1g43aLr4FyrJJkGAbhQTBmDfm94";
-        //private const string ApiBaseUrl = "https://34.128.145.217.nip.io/bnb_auth_v1";
-        private const string ApiBaseUrl = "http://localhost:8306";
+        private const string ApiBaseUrl = "https://34.128.145.217.nip.io/bnb_auth_v1";
+        //private const string ApiBaseUrl = "http://localhost:8306";
 
         private const string ApiHost = "https://34.128.145.217.nip.io";
 
