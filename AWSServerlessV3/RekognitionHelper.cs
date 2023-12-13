@@ -8,33 +8,37 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-namespace AWSServerlessV3;
+
+
+
 
 public class RekognitionHelper
 {
+    static string ACCESSKEY = "AKIAX3P3FTUF3RFUKNOA";
+    static string SECRETKEY = "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";
 
-    /// <summary>
-    /// The default minimum confidence used for detecting labels.
-    /// </summary>
-    public const float DEFAULT_MIN_CONFIDENCE = 70f;
 
-    /// <summary>
-    /// The name of the environment variable to set which will override the default minimum confidence level.
-    /// </summary>
-    public const string MIN_CONFIDENCE_ENVIRONMENT_VARIABLE_NAME = "MinConfidence";
+    AmazonS3Client S3Client;
+    AmazonRekognitionClient RekognitionClient;
 
-    IAmazonS3 S3Client { get; }
+    public RekognitionHelper()
+    {
 
-    IAmazonRekognition RekognitionClient { get; }
+        // 配置 AWS S3 客户端（使用你的凭证和区域）
+        this.S3Client = new AmazonS3Client(ACCESSKEY, SECRETKEY, Amazon.RegionEndpoint.USEast1);
+        this.RekognitionClient = new AmazonRekognitionClient(ACCESSKEY, SECRETKEY, Amazon.RegionEndpoint.USEast1);
 
-    float MinConfidence { get; set; } = DEFAULT_MIN_CONFIDENCE;
 
-    HashSet<string> SupportedImageTypes { get; } = new HashSet<string> { ".png", ".jpg", ".jpeg" };
+    }
 
 
 
     public async Task detectLabelAndSaveLabelToDb(String srcBucket, String srcFileKey)
     {
+
+        this.S3Client = new AmazonS3Client(ACCESSKEY, SECRETKEY, Amazon.RegionEndpoint.USEast1);
+        this.RekognitionClient = new AmazonRekognitionClient(ACCESSKEY, SECRETKEY, Amazon.RegionEndpoint.USEast1);
+
 
         String key = srcFileKey;
         String bucketName = srcBucket;
@@ -45,7 +49,7 @@ public class RekognitionHelper
 
         var detectResponses = await RekognitionClient.DetectLabelsAsync(new DetectLabelsRequest
         {
-            MinConfidence = MinConfidence,
+            MinConfidence = 90f,
             Image = new Image
             {
                 S3Object = new Amazon.Rekognition.Model.S3Object
@@ -93,4 +97,3 @@ public class RekognitionHelper
         return;
     }
 }
- 

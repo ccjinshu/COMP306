@@ -1,4 +1,6 @@
 using Amazon.Lambda.Core;
+using Amazon.Rekognition;
+using Amazon.S3;
 
 
 // Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
@@ -60,33 +62,36 @@ public class StepFunctionTasks
 
         state.IsImageFile = true;
 
-
         return state;
 
     }
-
+ 
 
     public State DetectLabel(State state, ILambdaContext context)
     {
+        String fileName = state.FileName;
+        String bucketName = state.BucketName; 
 
         //开启定时器,等待 DetectLabelHandler 线程结束
-        Task.Run(() => DetectLabelHandler(state, context));
+        Task.Run(() => DetectLabelHandler(bucketName, fileName, context));
 
         //等待 DetectLabelHandler 线程结束
         Task.WaitAll();
+        state.Message = "Detect Label And Save Label To Db  Finish ";
         return state;
     }
 
 
-    public async Task DetectLabelHandler(State state, ILambdaContext context)
-    {
-        String fileName = state.FileName;
-        String bucketName = state.BucketName;
-        RekognitionHelper rekognitionHelper = new RekognitionHelper();
+    public async Task DetectLabelHandler(String bucketName, String fileName, ILambdaContext context)
+    { 
 
-        await rekognitionHelper.detectLabelAndSaveLabelToDb(bucketName, fileName);
+        float minConfidence = 90f;
 
-        state.Message = "Detect Label And Save Label To Db  Finish ";
+        RekognitionHelper rekognitionHelper = new RekognitionHelper( ); 
+
+        //rekognitionHelper.detectLabelAndSaveLabelToDb(bucketName, fileName);
+
+
 
         return;
     }
@@ -95,29 +100,28 @@ public class StepFunctionTasks
 
     public State GenerateThumbnailToS3(State state, ILambdaContext context)
     {
+        String fileName = state.FileName;
+        String bucketName = state.BucketName;
+        String targetbucketName = "lab4-image-thumbnail";// state.TargetBucketName;
 
         // ,等待 GenerateThumbnailToS3Handler 线程结束 
-        Task.Run(() => GenerateThumbnailToS3Handler(state, context));
-        Task.WaitAll(); 
-
+        Task.Run(() => GenerateThumbnailToS3Handler(bucketName, fileName, targetbucketName,context));
+        Task.WaitAll();
+        state.Message = "Generate Thumbnail To S3 Finish ";
         return state;
     }
 
     //GenerateThumbnailToS3Handler
-    public async Task GenerateThumbnailToS3Handler(State state, ILambdaContext context)
+    public async Task GenerateThumbnailToS3Handler(String bucketName, String fileName, String targetbucketName, ILambdaContext context)
     {
-        
-        String fileName = state.FileName;
-        String bucketName = state.BucketName;
-        String targetbucketName = state.TargetBucketName;
 
 
-        await   S3ImageProcessor.CreateAndUploadThumbnailToS3(bucketName, fileName, targetbucketName, 150, 150);
+        await S3ImageProcessor.CreateAndUploadThumbnailToS3(bucketName, fileName, targetbucketName, 150, 150);
 
-        state.Message = "Generate Thumbnail To S3 Finish ";
+
 
         return;
-        
+
 
     }
 }
