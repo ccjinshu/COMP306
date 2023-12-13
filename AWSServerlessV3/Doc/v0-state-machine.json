@@ -1,0 +1,37 @@
+{
+  "Comment": "State Machine",
+  "StartAt": "Greeting",
+  "States": {
+    "Greeting": {
+      "Type": "Task",
+      "Resource": "${GreetingTask.Arn}",
+      "Next": "WaitToActivate"
+    },
+    "WaitToActivate": {
+      "Type": "Wait",
+      "SecondsPath": "$.WaitInSeconds",
+      "Next": "Salutations"
+    },
+    "Salutations": {
+      "Type": "Task",
+      "Resource": "${SalutationsTask.Arn}",
+      "Next": "CheckIfImage"
+    },
+    "CheckIfImage": {
+      "Type": "Task",
+      "Resource": "${CheckIfImageTask.Arn}",
+      "Next": "DetectLabel"
+    },
+    "DetectLabel": {
+      "Type": "Task",
+      "Resource": "${DetectLabelTask.Arn}",
+      "Next": "GenerateThumbnailToS3"
+    },
+    "GenerateThumbnailToS3": {
+      "Type": "Task",
+      "Resource": "${DetectLabelTask.Arn}",
+      "End": true
+    }
+
+  }
+}

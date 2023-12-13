@@ -1,0 +1,53 @@
+{
+  "Comment": "Lab4-Image-Process By Shu Jin",
+  "StartAt": "Transform",
+  "States": {
+    "Transform": {
+      "Type": "Pass",
+      "Next": "CheckIfImage",
+      "Parameters": {
+        "BucketName.$": "$.detail.bucket.name",
+        "FileName.$": "$.detail.object.key"
+      }
+    },
+    "CheckIfImage": {
+      "Type": "Task",
+      "Resource": "${CheckIfImageTask.Arn}",
+      "Next": "DetectLabel",
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "NotImageException"
+          ],
+          "ResultPath": "$.errorInfo",
+          "Next": "Greeting"
+        }
+      ]
+    },
+    "DetectLabel": {
+      "Type": "Task",
+      "Resource": "${DetectLabelTask.Arn}",
+      "Next": "GenerateThumbnailToS3"
+    },
+    "GenerateThumbnailToS3": {
+      "Type": "Task",
+      "Resource": "${GenerateThumbnailToS3Task.Arn}",
+      "Next": "Greeting"
+    },
+    "Greeting": {
+      "Type": "Task",
+      "Resource": "${GreetingTask.Arn}",
+      "Next": "WaitToActivate"
+    },
+    "WaitToActivate": {
+      "Type": "Wait",
+      "SecondsPath": "$.WaitInSeconds",
+      "Next": "Salutations"
+    },
+    "Salutations": {
+      "Type": "Task",
+      "Resource": "${SalutationsTask.Arn}",
+      "End": true
+    }
+  }
+}
