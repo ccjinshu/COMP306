@@ -10,6 +10,11 @@
     "WaitToActivate": {
       "Type": "Wait",
       "SecondsPath": "$.WaitInSeconds",
+      "Next": "CheckIfImage"
+    },
+    "CheckIfImage": {
+      "Type": "Wait",
+      "SecondsPath": "$.WaitInSeconds",
       "Next": "Salutations"
     },
     "Salutations": {

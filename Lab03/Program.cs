@@ -37,9 +37,9 @@ namespace Lab03
 
             });
 
-            var connectionStringBuilder = new SqlConnectionStringBuilder(builder.Configuration.GetConnectionString("connction_Lab03"));
-            connectionStringBuilder.UserID = builder.Configuration["DbUser"];
-            connectionStringBuilder.Password = builder.Configuration["DbPassword"];
+            var connectionStringBuilder = new SqlConnectionStringBuilder(builder.Configuration.GetConnectionString("DefaultConnection_local"));
+            //connectionStringBuilder.UserID = builder.Configuration["DbUser"];
+            //connectionStringBuilder.Password = builder.Configuration["DbPassword"];
 
 
              

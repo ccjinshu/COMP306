@@ -25,7 +25,7 @@ namespace Lab01
 
         ObservableCollection<S3Object> objectsFromBucket = new ObservableCollection<S3Object>();
 
-        private static readonly RegionEndpoint bucketRegion = RegionEndpoint.CACentral1;
+        private static readonly RegionEndpoint bucketRegion = RegionEndpoint.USEast1;
 
         private void Bucket_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

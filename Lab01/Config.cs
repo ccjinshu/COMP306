@@ -9,8 +9,8 @@ namespace Lab01
 
     public static class Config
     {
-        public static readonly string ACCESSKEY = "AKIAX3P3FTUF3RFUKNOA";
-        public static readonly string SECRETKEY = "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";
+        public static readonly string ACCESSKEY = "AKIAX3P3FTUF7RSBIFUR";
+        public static readonly string SECRETKEY = "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";
 
     }
 }

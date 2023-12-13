@@ -9,10 +9,9 @@
     "profile"     : "sjin32",
     "region"      : "us-east-1",
     "configuration" : "Release",
-    "s3-prefix"     : "Sjin_AWSServerless1/",
+    "s3-prefix"     : "sjin32DetectImageLabels/",
     "template"      : "serverless.template",
-    "template-parameters" : "",
-    "template-substitutions" : "$.Resources.StateMachine.Properties.DefinitionString.Fn::Sub=state-machine.json",
-    "s3-bucket"              : "comp306-lab4-app",
-    "stack-name"             : "Comp306-Lab4-servless"
+    "template-parameters" : "\"BucketName\"=\"\"",
+    "s3-bucket"           : "comp306-lab4-app",
+    "stack-name"          : "Comp306-Lab4-Lambda-v2"
 }

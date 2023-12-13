@@ -15,7 +15,7 @@ namespace Lab03.AWS
     {
         //private static string awsAccessKey = "access-key-1";
         //private static string awsSecretKey = "secret-key-1";
-        string defaultBucketName = "s3-comp306-sjin-lab03-movie";
+        string defaultBucketName = "lab4-image-store";
         static Connection conn = new Connection();
         private readonly AmazonS3Client _s3Client;
         public S3Helper()

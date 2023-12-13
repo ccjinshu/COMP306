@@ -13,26 +13,24 @@ namespace Lab03.AWS
     {
         public AmazonDynamoDBClient Connect()
         {
-            var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("AppSettings.json", optional: true, reloadOnChange: true);
+            
 
-            string accessKeyID = builder.Build().GetSection("AWSCredentials").GetSection("AccesskeyID").Value;
-            string secretKey = builder.Build().GetSection("AWSCredentials").GetSection("Secretaccesskey").Value;
+            string accessKeyID = "AKIAX3P3FTUF7RSBIFUR";
+            string secretKey = "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";
             var credentials = new BasicAWSCredentials(accessKeyID, secretKey);
 
-            AmazonDynamoDBClient client = new AmazonDynamoDBClient(credentials, Amazon.RegionEndpoint.CACentral1);
+            AmazonDynamoDBClient client = new AmazonDynamoDBClient(credentials, Amazon.RegionEndpoint.USEast1);
             return client;
         }
 
         public AmazonS3Client ConnectS3()
         {
-            var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("AppSettings.json", optional: true, reloadOnChange: true);
-
-            string accessKeyID = builder.Build().GetSection("AWSCredentials").GetSection("AccesskeyID").Value;
-            string secretKey = builder.Build().GetSection("AWSCredentials").GetSection("Secretaccesskey").Value;
-
+           
+            string accessKeyID = "AKIAX3P3FTUF7RSBIFUR";
+            string secretKey = "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";
             //AmazonS3Client client = new AmazonS3Client(accessKeyID, secretKey);
             //get AmazonS3Client for CACentral1 region
-            AmazonS3Client client = new AmazonS3Client(accessKeyID, secretKey, Amazon.RegionEndpoint.CACentral1);
+            AmazonS3Client client = new AmazonS3Client(accessKeyID, secretKey, Amazon.RegionEndpoint.USEast1);
             return client;
         }
 

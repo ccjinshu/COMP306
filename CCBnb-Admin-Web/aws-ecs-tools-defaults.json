@@ -20,7 +20,7 @@
     "container-port-mapping"    : "80:80",
     "container-environment-variables" : "\"ASPNETCORE_ENVIRONMENT\"=\"Production\"",
     "skip-image-push"                 : false,
-    "cluster-service"                 : "CCBnbAdminWeb",
+    "cluster-service"                 : "ccweb/CCBnbAdminWeb",
     "desired-count"                   : 1,
     "deployment-minimum-healthy-percent" : 50,
     "deployment-maximum-percent"         : 200,

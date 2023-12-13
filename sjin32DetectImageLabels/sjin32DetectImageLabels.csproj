@@ -11,11 +11,13 @@
     <PublishReadyToRun>true</PublishReadyToRun>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.203.10" />
+    <PackageReference Include="AWSSDK.S3" Version="3.7.300.0" />
+    <PackageReference Include="AWSSDK.Rekognition" Version="3.7.300.0" />
     <PackageReference Include="Amazon.Lambda.Core" Version="2.2.0" />
     <PackageReference Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.4.0" />
-    <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.300.17" />
-    <PackageReference Include="AWSSDK.Rekognition" Version="3.7.300.17" />
-    <PackageReference Include="AWSSDK.S3" Version="3.7.304.6" />
-    <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="13.5.0" />
+    <PackageReference Include="Amazon.Lambda.S3Events" Version="3.1.0" />
+    <PackageReference Include="AWSSDK.SimpleNotificationService" Version="3.7.300.17" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 </Project>

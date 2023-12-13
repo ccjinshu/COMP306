@@ -21,7 +21,7 @@
     "container-environment-variables" : "",
     "skip-image-push"                 : false,
     "cluster-service"                 : "v6/v6",
-    "desired-count"                   : 2,
+    "desired-count"                   : 1,
     "deployment-minimum-healthy-percent" : 50,
     "deployment-maximum-percent"         : 200,
     "elb-target-group"                   : "arn:aws:elasticloadbalancing:ca-central-1:540082019595:targetgroup/v7/243d91c182318d20",
