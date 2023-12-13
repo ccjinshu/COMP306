@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 
 string bucketName = "lab4-image-store";
-string fileKey = "1.jpeg";
+string fileKey = "5.jpeg";
 string targetBucketName = "lab4-image-thumbnail";
 
 //DynamoDBHelper dynamoDBHelper = new DynamoDBHelper();
@@ -17,6 +17,9 @@ string targetBucketName = "lab4-image-thumbnail";
 
 //test detect label 
 RekognitionHelper.detectLabelAndSaveLabelToDb(bucketName, fileKey);
+
+//test generate thumbnail
+S3ImageProcessor.CreateAndUploadThumbnailToS3(bucketName, fileKey, targetBucketName, 100, 100).Wait();
 
 
 

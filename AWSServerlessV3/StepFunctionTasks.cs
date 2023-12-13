@@ -103,7 +103,8 @@ public class StepFunctionTasks
         //¼ÆÊ±Æ÷
         DateTime startTime = DateTime.Now;
      
-        GenerateThumbnailToS3Handler(bucketName, fileName, targetbucketName, context);
+        //GenerateThumbnailToS3Handler(bucketName, fileName, targetbucketName, context);
+        S3ImageProcessor.CreateAndUploadThumbnailToS3(bucketName, fileName, targetbucketName, 100, 100).Wait();
 
 
         DateTime endTime = DateTime.Now; 
@@ -115,20 +116,7 @@ public class StepFunctionTasks
         return state;
     }
 
-    //GenerateThumbnailToS3Handler
-    public async Task GenerateThumbnailToS3Handler(String bucketName, String fileName, String targetbucketName, ILambdaContext context)
-    {
-       //sleep 5s
-        
-
-         await S3ImageProcessor.CreateAndUploadThumbnailToS3(bucketName, fileName, targetbucketName, 150, 150);
-
-
-
-        return;
-
-
-    }
+ 
 }
 
 
