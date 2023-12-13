@@ -1,39 +1,34 @@
-﻿using Amazon.Lambda.Core;
-using Amazon.Rekognition;
+﻿using Amazon.Rekognition;
 using Amazon.Rekognition.Model;
 using Amazon.S3;
 using Amazon.S3.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 
 
 
-public class RekognitionHelper
+public static class RekognitionHelper
 {
     static string ACCESSKEY = "AKIAX3P3FTUF3RFUKNOA";
     static string SECRETKEY = "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";
 
 
-    AmazonS3Client S3Client;
-    AmazonRekognitionClient RekognitionClient;
+    private static readonly AmazonS3Client S3Client 
+        = new AmazonS3Client(ACCESSKEY, SECRETKEY, Amazon.RegionEndpoint.USEast1);
+    private static readonly AmazonRekognitionClient RekognitionClient 
+        = new AmazonRekognitionClient(ACCESSKEY, SECRETKEY, Amazon.RegionEndpoint.USEast1);
 
-    public RekognitionHelper()
+    //生成  ng 安装 AmazonRekognition  SDK
+    //dotnet add package AWSSDK.Rekognition --version
+    static RekognitionHelper()
     {
 
-        // 配置 AWS S3 客户端（使用你的凭证和区域）
-        this.S3Client = new AmazonS3Client(ACCESSKEY, SECRETKEY, Amazon.RegionEndpoint.USEast1);
-        this.RekognitionClient = new AmazonRekognitionClient(ACCESSKEY, SECRETKEY, Amazon.RegionEndpoint.USEast1);
-
+     
 
     }
 
 
 
-    public void detectLabelAndSaveLabelToDb(String srcBucket, String srcFileKey)
+    public static void detectLabelAndSaveLabelToDb(String srcBucket, String srcFileKey)
     {
 
 

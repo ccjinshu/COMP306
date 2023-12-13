@@ -11,7 +11,7 @@ public class DynamoDBHelper
     static string SECRETKEY = "gO0K3LdVOq6gOJuE3rNhTLCdZYF0tnwYSuDj6f/F";
 
 
-    public static  async Task InsertLabelDataAsync(String imageKey, String label, String confidence)
+    public static async Task InsertLabelDataAsync(String imageKey, String label, String confidence)
     {
         var client = new AmazonDynamoDBClient(ACCESSKEY, SECRETKEY, Amazon.RegionEndpoint.USEast1);
 
@@ -39,8 +39,6 @@ public class DynamoDBHelper
         {
             Console.WriteLine("Error: " + ex.Message);
         }
-
-         
     }
 }
  
